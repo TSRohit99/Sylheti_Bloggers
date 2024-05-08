@@ -1,0 +1,342 @@
+.active {
+  @apply text-red-700 underline underline-offset-4;
+}
+
+.blog-page-container {
+  padding-top: 50px;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pagination li {
+  margin: 0 5px;
+}
+.pagination a {
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #000;
+}
+.pagination a:hover {
+  background: #eee;
+}
+.pagination li.activerPagination {
+  background: rgb(74 222 128);
+  border-radius: 4px;
+  color: #fff;
+}
+
+.active-button {
+  color: rgb(74 222 128);
+}
+
+/* single blogpage */
+
+.blog-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header-section {
+  position: relative;
+}
+
+.header-image {
+  width: 100%;
+  height: auto;
+}
+
+.author-details {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.author-details span {
+  margin-right: 10px;
+}
+
+.blog-details {
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  margin-top: 20px; /* Adjust as needed */
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+p {
+  line-height: 1.6;
+  color: #333;
+}
+
+.reaction-buttons button {
+  margin-top: 10px;
+  margin-right: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+}
+
+.comment-section {
+  margin-top: 20px;
+}
+
+.comment-section input[type="text"] {
+  width: calc(100% - 80px);
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+}
+
+.comment-section button {
+  /* margin-left: 2%; */
+  width: 80px;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+}
+
+.category-section {
+  margin-top: 10px;
+}
+
+.category-section span {
+  background-color: #f7f7f7;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+/* profile page */
+
+.user-info {
+  display: flex; /* Use flexbox layout */
+}
+
+.profile-picture {
+  flex: 0 0 auto; /* Prevent shrinking */
+  margin-right: 20px; /* Adjust margin as needed */
+}
+
+.user-details {
+  flex: 1; /* Allow to grow */
+}
+
+.profile-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-picture {
+  margin-right: 20px;
+  position: relative;
+}
+
+.profile-picture img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.edit-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-details h1 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #333;
+}
+
+.user-details p {
+  margin-bottom: 5px;
+  color: #666;
+}
+
+.user-details input,
+.user-details textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.blog-post-history {
+  margin-top: 20px;
+}
+
+.blog-post-history h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.blog-post-history ul {
+  list-style: none;
+  padding: 0;
+}
+
+.blog-post-history li {
+  margin-bottom: 10px;
+}
+
+.blog-post-history li a {
+  text-decoration: none;
+  color: #333;
+}
+
+.blog-post-history li span {
+  margin-left: 10px;
+  color: #777;
+}
+
+/* ............ CreateBLog.......... */
+
+.blog-form {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+/* Style the input field to always have a border */
+input[type="number"] {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.cb button {
+  background-color: #1ad53d;
+  color: #000000;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cb button:hover {
+  background-color: #1ad53d;
+  font-size: 18px;
+}
+
+/* //comment section */
+
+/* CSS for comments section */
+/* CSS for comments section */
+.comment-section {
+  margin-top: 20px;
+}
+
+.comment-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.comment-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.comment-item {
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.comment-author {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.comment-text {
+  color: #333;
+}
+
+/* CSS for new comment input */
+.new-comment {
+  margin-top: 20px;
+}
+
+.new-comment input[type="text"] {
+  width: calc(100% - 80px); /* Adjust width as needed */
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.new-comment button {
+  width: 80px;
+  padding: 8px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.new-comment button:hover {
+  background-color: #0056b3;
+}
