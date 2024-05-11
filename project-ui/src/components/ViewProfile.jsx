@@ -7,7 +7,7 @@ function ViewProfile() {
     return (
       <div className="flex justify-center items-center h-full">
         <h1 className="mt-32 text-6xl text-center text-red-500">
-          User not found!
+          User not found! Maybe restrcited!
         </h1>
       </div>
     );

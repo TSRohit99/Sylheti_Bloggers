@@ -20,7 +20,9 @@ function Navbar() {
       : [
           { path: "/blogs", link: "Blogs" },
           { path: "/create", link: "Create" },
+          
         ];
+      currentUser.isAdmin ? navItems.push({ path: "/Admin", link: "Admin-Dash" }) : null;
   return (
     <>
       <header className="bg-green-400 text-white fixed top-0 left-0 right-0">

@@ -3,7 +3,6 @@ import validation from "../handlers/loginHandler";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
-import bcrypt from "bcryptjs";
 
 function Login() {
   const { currentUser, setCurrentUser } = useContext(UserContext);
@@ -48,6 +47,11 @@ function Login() {
 
           if (userData.success) {
             // Passwords match, user successfully logged in
+            if(userData.isVerified === 0){
+              alert("Apnar account bortomane check kora or, kindly ektu pore abr try korba!")
+              navigate("/")
+              return ;
+            }
             setCurrentUser({
               userLoggedIn: true,
               username: userData.username,

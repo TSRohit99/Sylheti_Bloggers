@@ -41,8 +41,9 @@ function SignUp() {
             "http://localhost:8081/signup",
             values
           );
-          alert("You have successfully registered!");
-          navigate("/login");
+          alert("You have successfully registered, verfication pending ace, verfication approve oile login korte parva!");
+          // navigate("/login");
+          navigate("/");
         }
       } catch (error) {
         console.error("Error checking email:", error);

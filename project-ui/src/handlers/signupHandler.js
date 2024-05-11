@@ -1,6 +1,8 @@
-function validation(values) {
+async function validation(values) {
   let errors = {};
   const password_pattern = /^(?=.*[A-Z]).{9,}$/;
+  const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 
   if (values.name === "") {
     errors.name = "Name nai bah apnar!";
@@ -16,6 +18,8 @@ function validation(values) {
 
   if (values.email === "") {
     errors.email = "email chara signup korba kmne?";
+  } else if (!email_pattern.test(values.email)) {
+    errors.email = "TikTak email dein!";
   } else {
     errors.email = "";
   }

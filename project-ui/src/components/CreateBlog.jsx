@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function CreateBlog({ value }) {
   const { currentUser } = useContext(UserContext);
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [readingTime, setReadingTime] = useState("1");
@@ -16,29 +16,40 @@ function CreateBlog({ value }) {
   const [readingTimeModified, setReadingTimeModified] = useState(false);
   const [categoryModified, setCategoryModified] = useState(false);
   const navigate = useNavigate();
+ 
 
   const data = value === "Update your Blog" ? useLoaderData() : null;
+  const btnName = value === "Update your Blog" ? "Update" : "Create";
+  const info = value === "Update your Blog" ? data.data[0]: null ;
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const formData = new FormData();
-    formData.append("file", file);
-    formData.append("title", titleModified ? title : data ? data[0].title : "");
+      if (Array.isArray(files)) {
+    for (const file of files) {
+      formData.append("files", file);
+    }
+  } else {
+    formData.append("files", files);
+  }
+    formData.append("title", titleModified ? title : data ? info.title : "");
     formData.append(
       "content",
-      contentModified ? content : data ? data[0].content : ""
+      contentModified ? content : data ? info.content : ""
     );
     formData.append(
       "category",
-      categoryModified ? category : data ? data[0].category : ""
+      categoryModified ? category : data ? info.category : ""
     );
     formData.append(
       "readingTime",
-      readingTimeModified ? readingTime : data ? data[0].readingTime : ""
+      readingTimeModified ? readingTime : data ? info.readingTime : ""
     );
 
-    if (value === "Update your Blog" && currentUser.username === data[0].username) {
-      formData.append ("bid", data[0].bid);
+    if (value === "Update your Blog" && currentUser.username === info.username) {
+      formData.append ("bid", info.bid);
       try {
         const response = await axios.post(
           `http://localhost:8081/update/`,
@@ -46,13 +57,16 @@ function CreateBlog({ value }) {
         );
 
         alert("You have successfully updated the blog!");
-        navigate(`/blogs/${data[0].bid}`);
+        navigate(`/blogs/${info.bid}`);
       } catch (error) {
         console.error("Error updating blog:", error);
       }
     } else if(value === "Create a new Blog" && currentUser.username!== "") {
       try {
+
+
         formData.append ("username", currentUser.username);
+
         const response = await axios.post(
           `http://localhost:8081/create`,
           formData
@@ -75,21 +89,23 @@ function CreateBlog({ value }) {
         <h2 className="text-4xl text-center">{value}</h2> <br />
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="header-picture">Header Picture:</label>
+            <label htmlFor="header-picture">Header Pictures:(max add 5 pictures)</label>
 
             {value === "Update your Blog" ? (
               <input
                 type="file"
                 accept="image/*"
                 id="header-picture"
-                onChange={(e) => setFile(e.target.files[0])}
+                onChange={(e) => setFiles(Array.from(e.target.files))}
+                multiple
               />
             ) : (
               <input
                 type="file"
                 accept="image/*"
                 id="header-picture"
-                onChange={(e) => setFile(e.target.files[0])}
+                onChange={(e) => setFiles(Array.from(e.target.files))}
+                multiple
                 required
               />
             )}
@@ -99,7 +115,7 @@ function CreateBlog({ value }) {
             <input
               type="text"
               id="title"
-              defaultValue={data ? data[0].title : ""}
+              defaultValue={data ? info.title : ""}
               onChange={(e) => {
                 setTitle(e.target.value);
                 setTitleModified(true);
@@ -111,7 +127,7 @@ function CreateBlog({ value }) {
             <label htmlFor="content">Content:</label>
             <textarea
               id="content"
-              defaultValue={data ? data[0].content : ""}
+              defaultValue={data ? info.content : ""}
               onChange={(e) => {
                 setContent(e.target.value);
                 setContentModified(true);
@@ -125,7 +141,7 @@ function CreateBlog({ value }) {
             <input
               type="number"
               id="reading-time"
-              defaultValue={data ? data[0].readingTime : ""}
+              defaultValue={data ? info.readingTime : ""}
               onChange={(e) => {
                 setReadingTime(e.target.value);
                 setReadingTimeModified(true);
@@ -139,7 +155,7 @@ function CreateBlog({ value }) {
             <label htmlFor="category">Category:</label>
             <select
               id="category"
-              defaultValue={data ? data[0].category : ""}
+              defaultValue={data ? info.category : ""}
               onChange={(e) => {
                 setCategory(e.target.value);
                 setCategoryModified(true);
@@ -156,7 +172,7 @@ function CreateBlog({ value }) {
 
           <div className="cb ml-96">
             <button type="submit" className="bg-green-400">
-              Submit
+              {btnName}
             </button>
           </div>
         </form>
