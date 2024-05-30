@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import validation from "../handlers/signupHandler";
+import validation from "../regex/signupHandler";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 

@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import validation from "../handlers/loginHandler";
+import validation from "../regex/loginHandler";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
