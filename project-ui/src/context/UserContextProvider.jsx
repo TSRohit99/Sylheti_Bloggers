@@ -7,7 +7,7 @@ const UserContextProvider = ({ children }) => {
     const storedUser = localStorage.getItem("currentUser");
     return storedUser
       ? JSON.parse(storedUser)
-      : { userLoggedIn: false, username: "", isAdmin: false };
+      : { userLoggedIn: false, username: "", isAdmin: false , restricted : false };
   });
 
   // Update localStorage whenever user state changes

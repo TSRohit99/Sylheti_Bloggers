@@ -402,7 +402,7 @@ app.post("/admin-action", (req, res) => {
 //<<<<< /login >>>>>>>>>
 app.post("/login", (req, res) => {
   const sql =
-    "SELECT users.email, users.username, users.password, users.isVerified, roles.role FROM users LEFT JOIN roles on users.id = roles.id WHERE email = ?";
+    "SELECT users.email, users.username, users.password, users.restricted, users.isVerified, roles.role FROM users LEFT JOIN roles on users.id = roles.id WHERE email = ?";
 
   database.query(sql, [req.body.email], async (err, data) => {
     if (err) throw err;
@@ -420,7 +420,8 @@ app.post("/login", (req, res) => {
        success: true , 
        isAdmin: admin,
        username : data[0].username ,
-       isVerified : data[0].isVerified 
+       isVerified : data[0].isVerified,
+       restricted : data[0].restricted
      });}
 
      else {

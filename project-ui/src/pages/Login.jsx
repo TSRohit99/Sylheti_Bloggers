@@ -52,6 +52,11 @@ function Login() {
               navigate("/")
               return ;
             }
+            if(userData.restricted === 1){
+              alert("Apnar account restricted kora oise, kindly review er jonno opekka korba!");
+              navigate("/")
+              return ;
+            }
             setCurrentUser({
               userLoggedIn: true,
               username: userData.username,

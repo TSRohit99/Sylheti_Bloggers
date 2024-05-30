@@ -20,6 +20,8 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // setErrors(validation(values));
+
     const validationErrors = validation(values);
     setErrors(validationErrors);
 
@@ -36,7 +38,7 @@ function SignUp() {
             ...errors,
             email: "E email dia already ekta account ace!",
           });
-        } else {
+        } else  {
           const signupResponse = await axios.post(
             "http://localhost:8081/signup",
             values
