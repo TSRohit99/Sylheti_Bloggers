@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserEdit, faSave } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import UserContext from "../context/UserContext";
 
@@ -32,6 +32,7 @@ function Profile() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [file, setFile] = useState(null);
+  const imgPrefix = "http://localhost:8081/images/";
   
   useEffect(() => {
     const fetchData = async () => {
@@ -41,15 +42,17 @@ function Profile() {
         const joinDate = joined.split("T")[0];
         setUser({
           fullName: fname || "",
-          profilePicture: "http://localhost:8081/images/" + pfpURL || "",
+          profilePicture: imgPrefix + pfpURL || "",
           bio: bio || "",
           joinDate: joinDate || "",
           from: area || "",
           bid: bid,
           blogs: (data.map((item) => ({
-            id: item.bid || "",
+            bid: item.bid || "",
             title: item.title || "",
-            date: item.publishedAt ? item.publishedAt.split("T")[0] : null,
+            publishedAt: item.publishedAt ? item.publishedAt.split("T")[0] : null,
+            published: item.published,
+            deleted: item.deleted,
           }))),
         });
       }
@@ -107,6 +110,53 @@ function Profile() {
     }
   };
 
+  const handleBlog = async (bid, order) => {
+    try {
+      const method = order ? "publish" : "unpublish";
+      const data = {
+        bid: bid,
+        method: method,
+      };
+
+      const confirmation = window.confirm(
+        `Are you sure you want to ${method} this blog ?`)
+      if (confirmation) {
+        const response = await axios.post(
+          `http://localhost:8081/profile/blog-action`,
+          data
+        );
+        if (response.data.success) {
+          alert(`Blog index ${bid} is now ${method}ed!`);
+          window.location.reload();
+        }
+        else {
+          alert(`Error while performing this task!`);
+          window.location.reload();
+        }
+      }
+    } catch (err) {
+      console.error("Error while solving : " + err);
+    }
+  }
+
+  const handleDelete = async (bid) => {
+    const confirmation = window.confirm("Are you sure you want to delete?");
+
+    if (confirmation) {
+      const response = await axios.post("http://localhost:8081/delete", null, {
+        params: {
+          bid: bid,
+        },
+      });
+      const data = response.data;
+      if (data.success) {
+        alert("This blog has been deleted successfully!");
+        window.location.reload();
+      } else {
+        alert("Failed to delete the blog. Please try again later.");
+      }
+    }
+  };
   const handleLogout = () => {
     setCurrentUser({
       userLoggedIn: false,
@@ -201,19 +251,72 @@ function Profile() {
       ) : null}
       <div className="blog-post-history">
         <h2>Blog Post History ({blogCount})</h2>
-        {blogCount > 0 && (
-          <ul>
-            {user.blogs.map((blog) => (
-              <li key={blog.id}>
-                {/* Render the anchor tag only if blog is not null */}
-                <a href={`/blogs/${blog.id}`}>
-                  {blog.title.substring(0, 50) + "......"}
-                </a>
-                <span>{blog.date}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+        
+        {blogCount > 0 && (  
+        <table className="w-full">
+                  <thead>
+                    <tr className="bg-gray-200">
+                      <th className="w-1/4 py-2 px-4 text-left">Blog Index</th>
+                      <th className="w-1/3 py-2 px-4 text-left">Blog Title</th>
+                      <th className="w-1/4 py-2 px-4 text-left">Created At</th>
+                      <th className="w-1/4 py-2 px-4 text-left">Action</th>
+                      <th className="w-1/5 py-2 px-4 text-left">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {user.blogs.filter((item)=> item.deleted == 0 ).map((blog) => (
+                      <tr key={blog.bid} className="border-b">
+                        <td>
+                          <Link to={`/blogs/${blog.bid}`}>
+                            {" "}
+                            <span className="w-1/4 truncate text-lg">
+                              {blog.bid}
+                            </span>{" "}
+                          </Link>{" "}
+                        </td>
+                        <td className="py-2 px-4 truncate">
+                        <Link to={`/blogs/${blog.bid}`}> {blog.title} </Link></td>
+
+                        <td className="py-2 px-4 truncate text-right">
+                          {blog.publishedAt}
+                        </td>
+                        <td className="py-2 px-4">
+                          {blog.published ? (
+                            <button
+                              onClick={() => handleBlog(blog.bid , 0 )}
+                              className="bg-red-500 text-white px-2 py-1 rounded"
+                            >
+                              UnPublish
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleBlog(blog.bid, 1)}
+                              className="bg-green-500 text-white px-2 py-1 rounded"
+                            >
+                              Publish
+                            </button>
+                          )}
+                        </td>
+                        <td className="py-2 px-4">
+                        <button
+                              onClick={() => handleDelete(blog.bid)}
+                              className="bg-red-500 text-white px-2 py-1 rounded"
+                            >
+                              Delete
+                            </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>)
+        
+        }
+         
+
+
+
+
+
       </div>
     </div>
   );

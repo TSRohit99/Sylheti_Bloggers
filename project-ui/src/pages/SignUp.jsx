@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useState , useContext} from "react";
 import validation from "../regex/signupHandler";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../context/UserContext";
+import Profile from "../components/Profile"
+
 
 function SignUp() {
+  const { currentUser } = useContext(UserContext);
+  if(currentUser.username!= ""){
+    return <Profile />
+  }
   const [values, setValues] = useState({
     name: "",
     area: "",

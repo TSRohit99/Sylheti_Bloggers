@@ -9,6 +9,7 @@ import {
   faThumbsDown,
   faEdit,
   faTrash,
+  faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import UserContext from "../context/UserContext";
 import axios from "axios";
@@ -17,6 +18,7 @@ function SingleBlog() {
   const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
   const data = useLoaderData();
+
   if (!data.data[0] || data.data[0].length === 0) {
     return (
       <div className="flex justify-center items-center h-full">
@@ -28,7 +30,9 @@ function SingleBlog() {
   }
 
   const {
+    published,
     username,
+    id,
     bid,
     title,
     content,
@@ -37,21 +41,45 @@ function SingleBlog() {
     category,
     readingTime,
   } = data.data[0];
+
+  if (published == 0) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <h1 className="mt-32 text-5xl text-center text-red-500">
+          This blog has been unpublished/deleted!
+        </h1>
+      </div>
+    );
+  }
   const date = publishedAt.split("T")[0];
   const [likeCount, setLikeCount] = useState(null);
   const [dislikeCount, setDisLikeCount] = useState(null);
   const [comments, setComments] = useState([]);
   const [userComment, setUserComment] = useState(null);
   const [totalComment, setTotalComment] = useState(0);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportText, setReportText] = useState("");
+  const [repCategory, setRepCategory] = useState("");
+  const [alreadyReported, setAlreadyReported] = useState(false);
+
+ 
 
   useEffect(() => {
     // Fetch like and dislike counts
+
     const fetchLikeDislikeCounts = async () => {
       try {
         const response = await fetch(`http://localhost:8081/info/${bid}`);
         const data = await response.json();
         setLikeCount(data.likeCount);
-        setDisLikeCount(data.dislikeCount);
+        // setDisLikeCount(data.dislikeCount);
+        const formData = new FormData();
+        formData.append("reportedBy", currentUser.username);
+        formData.append("bid", bid);
+        const check = await axios.post(`http://localhost:8081/blogs/reportcheck`, formData);      
+        if(check.data.success)
+          setAlreadyReported(true);
+
       } catch (error) {
         console.error("Error fetching like/dislike counts:", error);
       }
@@ -127,6 +155,7 @@ function SingleBlog() {
         },
       });
       const data = response.data;
+
       if (data.success) {
         alert("This blog has been deleted successfully!");
         navigate("/blogs");
@@ -143,9 +172,6 @@ function SingleBlog() {
     formData.append("author", currentUser.username);
     formData.append("bid", bid);
 
-    console.log("User Comment:", userComment);
-    console.log("Current User:", currentUser.username);
-    console.log("FormData:", formData);
 
     if (!userComment) {
       alert("Please enter a comment before submitting.");
@@ -195,6 +221,48 @@ function SingleBlog() {
     );
   };
 
+  
+ 
+
+
+
+  const handleReport = () => {
+    setShowReportModal(true);
+  };
+
+  const handleReportSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("reportedBy", currentUser.username);
+    formData.append("reportText", reportText);
+    formData.append("repCategory", repCategory);
+    formData.append("bid", bid);
+    formData.append("blogAuthor", username);
+    formData.append("author_id", id);
+    try{
+    const response = await axios.post(`http://localhost:8081/report/blogs`,
+    formData);
+  
+    if( response.data.success){
+      alert("You have succesfully reported, admins will check this report ASAP!")
+      window.location.reload();
+      
+    }
+
+  }catch(err){
+    console.error("got an error : ", err);
+    alert("Error when reporting : status -> failed")
+  }
+
+    setShowReportModal(false);
+    setReportText("");
+    setRepCategory("");
+  };
+
+  const handleReportCancel = () => {
+    setShowReportModal(false);
+    setReportText("");
+  };
   return (
     <div className="blog-page py-14">
       <div className="header-section">
@@ -253,6 +321,21 @@ function SingleBlog() {
               <button onClick={handleLike}>
                 <FontAwesomeIcon icon={faThumbsUp} /> Like {likeCount}
               </button>
+
+              {currentUser.username !== username ? (
+                !alreadyReported ? (
+                  <button
+                    onClick={handleReport}
+                    style={{ backgroundColor: "red" }}
+                  >
+                    <FontAwesomeIcon icon={faTriangleExclamation} /> Report
+                  </button>
+                ) : (
+                  <button style={{ backgroundColor: "red" }}>
+                    <FontAwesomeIcon icon={faTriangleExclamation} /> Reported
+                  </button>
+                )
+              ) : null}
             </div>
           ) : null}
           {currentUser.isAdmin || currentUser.username === username ? (
@@ -262,16 +345,63 @@ function SingleBlog() {
                   onClick={handleEdit}
                   style={{ backgroundColor: "gray" }}
                 >
-                  <FontAwesomeIcon icon={faEdit} /> EDIT
+                  <FontAwesomeIcon icon={faEdit} /> Edit
                 </button>
               ) : null}
 
               <button onClick={handleDelete} style={{ backgroundColor: "red" }}>
-                <FontAwesomeIcon icon={faTrash} /> DELETE
+                <FontAwesomeIcon icon={faTrash} /> Delete
               </button>
             </div>
           ) : null}
         </div>
+
+        {showReportModal && (
+         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
+         <div className="bg-white rounded-lg p-6 w-96">
+           <h2 className="text-lg font-bold mb-4">Report Content</h2>
+           <form onSubmit={handleReportSubmit}>
+             <div className="form-group mb-4">
+               <label htmlFor="repCategory">Category:</label>
+               <select
+                 id="repCategory"
+                 className="w-full p-2 border border-gray-300 rounded-md mt-1"
+                 onChange={(e) => setRepCategory(e.target.value)}
+                 required
+               >
+                 <option value="">Select Category</option> {/* Default option should have an empty value */}
+                 <option value="Batfar">Batfar</option>
+                 <option value="Gujob">Gujob</option>
+                 <option value="Sensitive">Sensitive</option>
+               </select>
+             </div>
+             <textarea
+               className="w-full h-32 p-2 border border-gray-300 rounded-md mb-4"
+               value={reportText}
+               onChange={(e) => setReportText(e.target.value)}
+               placeholder="Kulia koin kitar lagi report marra..."
+               required
+             />
+             <div className="flex justify-end">
+               <button
+                 type="button"
+                 className="px-4 py-2 bg-red-500 text-white rounded-md mr-2"
+                 onClick={handleReportCancel}
+               >
+                 Cancel
+               </button>
+               <button
+                 type="submit"
+                 className="px-4 py-2 bg-green-500 text-white rounded-md"
+               >
+                 Submit
+               </button>
+             </div>
+           </form>
+         </div>
+       </div>
+       
+        )}
 
         {/* comment section */}
 

@@ -14,7 +14,6 @@ import SingleBlog from "./components/SingleBlog.jsx";
 import Profile from "./components/Profile.jsx";
 import CreateBlog from "./components/CreateBlog.jsx";
 import AdminDashboard from "./components/AdminDashboard.jsx";
-
 import ViewProfile from "./components/ViewProfile.jsx";
 
 const Root = () => {

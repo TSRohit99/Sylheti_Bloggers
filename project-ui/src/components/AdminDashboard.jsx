@@ -1,6 +1,11 @@
-import { useState, useContext, useEffect } from "react";
-import { FaUsers, FaChartBar, FaClipboardCheck } from "react-icons/fa";
-import { useLoaderData } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import {
+  FaUsers,
+  FaChartBar,
+  FaClipboardCheck,
+  FaBookOpen,
+} from "react-icons/fa";
+import { useLoaderData, Link } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import axios from "axios";
 
@@ -19,6 +24,7 @@ const AdminDashboard = () => {
 
   const stats = {
     totalUser: data.users.length,
+    adminCount: data.users[0].adminCount,
     verifiedUsers: data.totalUsers,
     unVerifiedUsersCount: data.users.length - data.totalUsers,
     totalLikes: data.totalLikes,
@@ -28,9 +34,7 @@ const AdminDashboard = () => {
     restrictedBlogs: data.restrictedBlogs,
   };
 
-  console.log(stats);
-
-  const [activeTab, setActiveTab] = useState('verification');
+  const [activeTab, setActiveTab] = useState("verification");
 
   useEffect(() => {
     // Get the active tab from local storage on component mount
@@ -40,11 +44,10 @@ const AdminDashboard = () => {
     }
   }, []);
 
- 
   useEffect(() => {
     // Store the active tab in local storage whenever it changes
     localStorage.setItem("activeTab", activeTab);
-  
+
     // Cleanup function to remove the stored value when the component unmounts
     return () => {
       localStorage.removeItem("activeTab");
@@ -55,13 +58,29 @@ const AdminDashboard = () => {
 
   const users = apiResponseUsers.map((user) => ({
     id: user.id,
-    name: user.fname,
+    role: user.role,
+    username: user.username,
     email: user.email,
     area: user.area,
     userBlogs: user.totalBlogs || 0,
     isVerified: user.isVerified === 1,
     restricted: user.restricted === 1,
   }));
+  const apiResponseBlogReports = data.reportedBlogs;
+
+  const blogReports = apiResponseBlogReports.map((blog) => ({
+    report_id: blog.report_id,
+    blogId: blog.bid,
+    reportedBy: blog.reportedBy,
+    blogAuthor: blog.blogAuthor,
+    reportText: blog.reportText,
+    category: blog.category,
+    solved: blog.solved,
+    author_id: blog.author_id,
+  }));
+
+ 
+  const [reportText, setReportText] = useState("");
 
   const handleVerifyUser = async (userId) => {
     try {
@@ -129,6 +148,35 @@ const AdminDashboard = () => {
       console.error("Error while unrestricting : " + err);
     }
   };
+
+  const handleSolved = async (report_id) => {
+    // Implement logic to restrict the user with the given userId
+    try {
+      const data = {
+        id: report_id,
+        status: "solved",
+        text: reportText,
+      };
+      const confirmation = true;
+      // const confirmation = window.confirm(
+      //   "Are you sure you want to solve this report?"
+      // );
+      if (confirmation) {
+        const response = await axios.post(
+          `http://localhost:8081/admin-action`,
+          data
+        );
+        if (response.data.success) {
+          alert(`${report_id} report_id is now solved!`);
+          setReportText("");
+          window.location.reload();
+        }
+      }
+    } catch (err) {
+      console.error("Error while solving : " + err);
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 mt-10">
       <nav className="bg-indigo-600 text-white py-6 h-16 ">
@@ -163,6 +211,18 @@ const AdminDashboard = () => {
                 Users
               </a>
             </li>
+            <li>
+              <a
+                href="#"
+                className={`flex items-center text-white hover:bg-indigo-800 px-2 py-1 rounded ${
+                  activeTab === "blogReports" ? "bg-indigo-800" : ""
+                }`}
+                onClick={() => setActiveTab("blogReports")}
+              >
+                <FaBookOpen className="mr-2" />
+                Blog Reports
+              </a>
+            </li>
 
             <li>
               <a
@@ -195,7 +255,7 @@ const AdminDashboard = () => {
                         key={user.id}
                         className="flex justify-between items-center mb-2"
                       >
-                        <span className="w-1/4 truncate">{user.name}</span>
+                        <span className="w-1/4 truncate">{user.username}</span>
                         <span className="w-1/4 truncate">{user.email}</span>
                         <span className="w-1/4 truncate">{user.area}</span>
                         <span className="w-1/4"></span>
@@ -222,27 +282,72 @@ const AdminDashboard = () => {
 
           {activeTab === "users" && (
             <div>
-              <h2 className="text-2xl font-bold mb-4">Users</h2>
+              <h2 className="text-2xl font-bold mb-4">Users & Admins ({stats.totalUser})</h2>
               <div className="bg-white shadow-md rounded p-4">
                 <h3 className="text-xl font-bold mb-2">
-                  All Users ({stats.totalUser})
+                  All Admins ({stats.adminCount})
                 </h3>
                 <table className="w-full">
                   <thead>
                     <tr className="bg-gray-200">
-                      <th className="w-1/5 py-2 px-4">Name</th>
-                      <th className="w-1/3 py-2 px-4">Email</th>
-                      <th className="w-1/5 py-2 px-4">Area</th>
-                      <th className="w-1/5 py-2 px-4">Blog Count</th>
-                      <th className="w-1/5 py-2 px-4">Verification Status</th>
-                      <th className="w-1/5 py-2 px-4">Action</th>
+                      <th className="w-1/4 py-2 px-4 text-left">UserName</th>
+                      <th className="w-1/4 py-2 px-4 text-left">Email</th>
+                      <th className="w-1/4 py-2 px-4 text-left">Area</th>
+                      <th className="w-1/4 py-2 px-4 text-left">Blog Count</th>
                     </tr>
                   </thead>
                   <tbody>
                     {/* {users.filter((user) => user.isVerified).map((user) => ( */}
-                    {users.map((user) => (
+                    {users.filter((user)=> user.role=== "admin").map((user) => (
                       <tr key={user.id} className="border-b">
-                        <td className="py-2 px-4 truncate">{user.name}</td>
+                        <td>
+                          <Link to={`/profile/${user.username}`}>
+                            {" "}
+                            <span className="w-1/4 truncate text-lg">
+                              {user.username}
+                            </span>{" "}
+                          </Link>{" "}
+                        </td>
+                        <td className="w-1/4 py-2 px-4 truncate">{user.email}</td>
+                        <td className="w-1/4 py-2 px-4 truncate text-left">
+                          {user.area}
+                        </td>
+                        <td className="w-1/4 py-2 px-4 truncate text-left">
+                          {user.userBlogs}
+                        </td>
+                        
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <h3 className="mt-6 text-xl font-bold mb-2">
+                  All Users ({stats.totalUser - stats.adminCount})
+                </h3>
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gray-200">
+                      <th className="w-1/5 py-2 px-4 text-left">UserName</th>
+                      <th className="w-1/3 py-2 px-4 text-left">Email</th>
+                      <th className="w-1/5 py-2 px-4 text-left">Area</th>
+                      <th className="w-1/5 py-2 px-4 text-left">Blog Count</th>
+                      <th className="w-1/5 py-2 px-4 text-left">
+                        Verification Status
+                      </th>
+                      <th className="w-1/5 py-2 px-4 text-left">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* {users.filter((user) => user.isVerified).map((user) => ( */}
+                    {users.filter((user)=> user.role!== "admin").map((user) => (
+                      <tr key={user.id} className="border-b">
+                        <td>
+                          <Link to={`/profile/${user.username}`}>
+                            {" "}
+                            <span className="w-1/4 truncate text-lg">
+                              {user.username}
+                            </span>{" "}
+                          </Link>{" "}
+                        </td>
                         <td className="py-2 px-4 truncate">{user.email}</td>
                         <td className="py-2 px-4 truncate text-right">
                           {user.area}
@@ -282,7 +387,7 @@ const AdminDashboard = () => {
                           ) : (
                             <button
                               onClick={() => handleUnRestrictUser(user.id)}
-                              className="bg-red-500 text-white px-2 py-1 rounded"
+                              className="bg-green-500 text-white px-2 py-1 rounded"
                             >
                               UnRestrict
                             </button>
@@ -306,12 +411,16 @@ const AdminDashboard = () => {
                     <p>Total Users</p>
                   </div>
                   <div className="text-center">
-                    <h3 className="text-xl font-bold text-green-500">{stats.totalBlogs}</h3>
-                    <p>Total Blogs</p>
+                    <h3 className="text-xl font-bold text-green-500">
+                      {stats.totalBlogs}
+                    </h3>
+                    <p>Total Created Blogs</p>
                   </div>
                   <div className="text-center">
-                    <h3 className="text-xl font-bold text-red-500">{stats.restrictedBlogs}</h3>
-                    <p>Restricted Blogs</p>
+                    <h3 className="text-xl font-bold text-red-500">
+                      {stats.restrictedBlogs}
+                    </h3>
+                    <p>Restricted/Deleted Blogs</p>
                   </div>
                   <div className="text-center">
                     <h3 className="text-xl font-bold text-red-500">
@@ -333,6 +442,112 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 {/* Add more stats or visualizations as needed */}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "blogReports" && (
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Blog Reports</h2>
+              <div className="bg-white shadow-md rounded p-4">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gray-200">
+                      <th className="w-1/6 py-2 px-4 text-left text-indigo-600 font-semibold">
+                        Reported By
+                      </th>
+                      <th className="w-1/6 py-2 px-4 text-left text-indigo-600 font-semibold">
+                        Report Category
+                      </th>
+                      <th className="w-1/6 py-2 px-4 text-left text-indigo-600 font-semibold">
+                        Blog Id
+                      </th>
+                      <th className="w-1/6 py-2 px-4 text-left text-indigo-600 font-semibold">
+                        Blog Author
+                      </th>
+                      <th className="w-1/6 py-2 px-4 text-left text-indigo-600 font-semibold">
+                        Action
+                      </th>
+                      <th className="w-1/6 py-2 px-4 text-left text-indigo-600 font-semibold">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {blogReports.map((report) => (
+                      <React.Fragment key={report.report_id}>
+                        <tr className="border-b">
+                          <td className="py-2 px-4 truncate text-left">
+                            {report.reportedBy}
+                          </td>
+                          <td className="py-2 px-4 truncate text-left">
+                            {report.category}
+                          </td>
+                          <td className="py-2 px-4 truncate text-left text-lg font-semibold">
+                          <Link to={`/blogs/${report.blogId}`}>
+                            {report.blogId}
+                            </Link>
+                          </td>
+                          <td className="py-2 px-4 truncate text-left text-lg font-semibold">
+                          <Link to={`/profile/${report.blogAuthor}`}>
+                            {report.blogAuthor}
+                            </Link>
+                          </td>
+                          <td className="py-2 px-4">
+                          <button 
+                    className="bg-red-500 text-white px-2 py-1 rounded text-left"
+                    onClick={() => {
+                      handleRestrictUser(report.author_id);
+                      handleSolved(report.report_id, report.adminFeedback);
+                    }}>
+                              Restrict
+                            </button>
+                          </td>
+                          <td className="py-2 px-4">
+                            <button 
+                            className="bg-green-500 text-white px-2 py-1 rounded text-left"
+                             onClick={() => handleSolved(report.report_id)}>
+                              Solved
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            colSpan="6"
+                            className="py-2 px-4 text-left bg-gray-100"
+                          >
+                            <span className="text-red-500 text-md font-bold ">
+                              {" "}
+                              Report Text:{" "}
+                            </span>{" "}
+                            {report.reportText}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            colSpan="6"
+                            className="py-2 px-4 text-left bg-gray-100"
+                          >
+                            <span className="text-gray-600 text-md font-bold">
+                              Admin Feedback:
+                            </span>
+                            <form >
+                            <textarea
+                              className="mt-2 w-full p-2 border border-gray-300 rounded"
+                              rows="2"
+                              value={reportText}
+                              onChange={(e) => setReportText(e.target.value)}
+                              placeholder="Enter your feedback here"
+                              required
+
+                            ></textarea>
+                          </form>
+                          </td>
+                        </tr>
+                      </React.Fragment>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           )}

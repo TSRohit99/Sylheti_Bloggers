@@ -17,7 +17,6 @@ function validation(values) {
   }
 
   if (!email_pattern.test(values.email)) {
-    console.log("its on pattern")
     errors.email = "TikTak email dein!";
   } else {
     errors.email = "";

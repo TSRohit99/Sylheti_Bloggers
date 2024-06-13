@@ -72,7 +72,7 @@ function CreateBlog({ value }) {
           formData
         );
         const bid = response.data.bid;
-        console.log(bid);
+        // console.log(bid);
         alert("You have successfully created the blog!");
         navigate(`/blogs/${bid}`);
       } catch (error) {

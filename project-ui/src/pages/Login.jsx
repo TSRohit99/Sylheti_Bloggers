@@ -3,16 +3,23 @@ import validation from "../regex/loginHandler";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
+import Profile from "../components/Profile"
 
 function Login() {
   const { currentUser, setCurrentUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  
+  if(currentUser.username!= ""){
+    return <Profile />
+  }
+
   const [values, setValues] = useState({
     email: "",
     password: "",
   });
 
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
+  
 
   const handleInput = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
