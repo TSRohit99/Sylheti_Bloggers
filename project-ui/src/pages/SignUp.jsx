@@ -7,6 +7,7 @@ import Profile from "../components/Profile"
 
 
 function SignUp() {
+   const apiPrefix = 'http://localhost:8081'
   const { currentUser } = useContext(UserContext);
   if(currentUser.username!= ""){
     return <Profile />
@@ -36,7 +37,7 @@ function SignUp() {
     if (Object.values(validationErrors).every((error) => error === "")) {
       try {
         const response = await fetch(
-          `http://localhost:8081/checker/${values.email}`
+          `${apiPrefix}/checker/${values.email}`
         );
         const data = await response.text();
 
@@ -47,7 +48,7 @@ function SignUp() {
           });
         } else  {
           const signupResponse = await axios.post(
-            "http://localhost:8081/signup",
+            `${apiPrefix}/signup`,
             values
           );
           alert("You have successfully registered, verfication pending ace, verfication approve oile login korte parva!");

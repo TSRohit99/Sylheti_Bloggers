@@ -6,8 +6,9 @@ import axios from "axios";
 import UserContext from "../context/UserContext";
 
 async function fetchProfileData(username) {
+   const apiPrefix = 'http://localhost:8081'
   try {
-    const response = await fetch(`http://localhost:8081/profile/${username}`);
+    const response = await fetch(`${apiPrefix}/profile/${username}`);
     const data = await response.json();
     return data;
   } catch (error) {
@@ -17,6 +18,7 @@ async function fetchProfileData(username) {
 }
 
 function Profile() {
+   const apiPrefix = 'http://localhost:8081'
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -32,7 +34,7 @@ function Profile() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [file, setFile] = useState(null);
-  const imgPrefix = "http://localhost:8081/images/";
+  const imgPrefix = `${apiPrefix}/images/`;
   
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +82,7 @@ function Profile() {
 
     axios
       .post(
-        `http://localhost:8081/update/profile`,
+        `${apiPrefix}/update/profile`,
         formData
       )
       .then((req) => console.log(req))
@@ -122,7 +124,7 @@ function Profile() {
         `Are you sure you want to ${method} this blog ?`)
       if (confirmation) {
         const response = await axios.post(
-          `http://localhost:8081/profile/blog-action`,
+          `${apiPrefix}/profile/blog-action`,
           data
         );
         if (response.data.success) {
@@ -143,7 +145,7 @@ function Profile() {
     const confirmation = window.confirm("Are you sure you want to delete?");
 
     if (confirmation) {
-      const response = await axios.post("http://localhost:8081/delete", null, {
+      const response = await axios.post(`${apiPrefix}/delete`, null, {
         params: {
           bid: bid,
         },

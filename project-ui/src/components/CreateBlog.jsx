@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function CreateBlog({ value }) {
   const { currentUser } = useContext(UserContext);
+   const apiPrefix = 'http://localhost:8081'
   const [files, setFiles] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -52,7 +53,7 @@ function CreateBlog({ value }) {
       formData.append ("bid", info.bid);
       try {
         const response = await axios.post(
-          `http://localhost:8081/update/`,
+          `${apiPrefix}/update/`,
           formData
         );
 
@@ -68,7 +69,7 @@ function CreateBlog({ value }) {
         formData.append ("username", currentUser.username);
 
         const response = await axios.post(
-          `http://localhost:8081/create`,
+          `${apiPrefix}/create`,
           formData
         );
         const bid = response.data.bid;

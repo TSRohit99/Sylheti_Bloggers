@@ -6,6 +6,7 @@ import UserContext from "../context/UserContext";
 import Profile from "../components/Profile"
 
 function Login() {
+   const apiPrefix = 'http://localhost:8081'
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const navigate = useNavigate();
   
@@ -36,7 +37,7 @@ function Login() {
     if (Object.values(validationErrors).every((error) => error === "")) {
       try {
         const response = await fetch(
-          `http://localhost:8081/checker/${values.email}`
+          `${apiPrefix}/checker/${values.email}`
         );
         const data = await response.text();
 
@@ -47,7 +48,7 @@ function Login() {
           });
         } else {
           const loginResponse = await axios.post(
-            "http://localhost:8081/login",
+            `${apiPrefix}/login`,
             values
           );
           const userData = loginResponse.data;

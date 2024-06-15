@@ -45,10 +45,11 @@ function ViewProfile() {
   }
 
   const joinDate = joined.split("T")[0];
+   const apiPrefix = 'http://localhost:8081'
 
   const [user, setUser] = useState({
     fullName: fname || "", // Initialize with an empty string if fname is null or undefined
-    profilePicture: "http://localhost:8081/images/" + pfpURL || "",
+    profilePicture: `${apiPrefix}/images/` + pfpURL || "",
     bio: bio || "",
     joinDate: joinDate || "",
     from: area || "",

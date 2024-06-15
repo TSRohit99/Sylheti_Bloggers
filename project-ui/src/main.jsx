@@ -17,6 +17,7 @@ import AdminDashboard from "./components/AdminDashboard.jsx";
 import ViewProfile from "./components/ViewProfile.jsx";
 
 const Root = () => {
+   const apiPrefix = 'http://localhost:8081'
   const router = createBrowserRouter([
     {
       path: "/",
@@ -46,13 +47,13 @@ const Root = () => {
           path: "/blogs/:bid",
           element: <SingleBlog />,
           loader: ({ params }) =>
-            fetch(`http://localhost:8081/blogs/${params.bid}`),
+            fetch(`${apiPrefix}/blogs/${params.bid}`),
         },
         {
           path: "/profile/:username",
           element: <ViewProfile />,
           loader: ({ params }) =>
-            fetch(`http://localhost:8081/profile/${params.username}`),
+            fetch(`${apiPrefix}/profile/${params.username}`),
         },
         {
           path: "/profile",
@@ -67,13 +68,13 @@ const Root = () => {
           path: "/update/:bid",
           element: <CreateBlog value="Update your Blog" />,
           loader: ({ params }) =>
-            fetch(`http://localhost:8081/blogs/${params.bid}`),
+            fetch(`${apiPrefix}/blogs/${params.bid}`),
         },
         {
           path: "/admin",
           element: <AdminDashboard />,
           loader: async () =>
-            await fetch(`http://localhost:8081/admin-dash`),
+            await fetch(`${apiPrefix}/admin-dash`),
         },
       ],
     },

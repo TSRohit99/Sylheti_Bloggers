@@ -9,10 +9,11 @@ function BlogPage() {
   const pageSize = 12;
   const [selectedCategory, setselectedCategory] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
+  const apiPrefix = 'http://localhost:8081'
 
   useEffect(() => {
     async function fetchBlogs() {
-      let url = `http://localhost:8081/blogs?page=${currentPage}&limit=${pageSize}`;
+      let url = `${apiPrefix}/blogs?page=${currentPage}&limit=${pageSize}`;
 
       if (selectedCategory) {
         url += `&category=${selectedCategory}`;

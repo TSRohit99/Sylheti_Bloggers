@@ -11,6 +11,9 @@ import axios from "axios";
 
 const AdminDashboard = () => {
   const { currentUser } = useContext(UserContext);
+   const apiPrefix = 'http://localhost:8081'
+ 
+ 
   if (!currentUser.isAdmin || currentUser.username === "") {
     return (
       <div className="flex justify-center items-center h-full">
@@ -89,7 +92,7 @@ const AdminDashboard = () => {
         status: "verified",
       };
       const response = await axios.post(
-        `http://localhost:8081/admin-action`,
+        `${apiPrefix}/admin-action`,
         data
       );
       if (response.data.success) {
@@ -113,7 +116,7 @@ const AdminDashboard = () => {
       );
       if (confirmation) {
         const response = await axios.post(
-          `http://localhost:8081/admin-action`,
+          `${apiPrefix}/admin-action`,
           data
         );
         if (response.data.success) {
@@ -136,7 +139,7 @@ const AdminDashboard = () => {
       );
       if (confirmation) {
         const response = await axios.post(
-          `http://localhost:8081/admin-action`,
+          `${apiPrefix}/admin-action`,
           data
         );
         if (response.data.success) {
@@ -163,7 +166,7 @@ const AdminDashboard = () => {
       // );
       if (confirmation) {
         const response = await axios.post(
-          `http://localhost:8081/admin-action`,
+          `${apiPrefix}/admin-action`,
           data
         );
         if (response.data.success) {

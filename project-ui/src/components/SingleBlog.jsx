@@ -15,6 +15,7 @@ import UserContext from "../context/UserContext";
 import axios from "axios";
 
 function SingleBlog() {
+   const apiPrefix = 'http://localhost:8081'
   const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
   const data = useLoaderData();
@@ -69,14 +70,15 @@ function SingleBlog() {
 
     const fetchLikeDislikeCounts = async () => {
       try {
-        const response = await fetch(`http://localhost:8081/info/${bid}`);
+        const response = await fetch(`${apiPrefix}/info/${bid}`);
         const data = await response.json();
         setLikeCount(data.likeCount);
         // setDisLikeCount(data.dislikeCount);
         const formData = new FormData();
         formData.append("reportedBy", currentUser.username);
         formData.append("bid", bid);
-        const check = await axios.post(`http://localhost:8081/blogs/reportcheck`, formData);      
+        const check = await axios.post(`${apiPrefix}/blogs/reportcheck`, formData);   
+        console.log(check.data.success)   
         if(check.data.success)
           setAlreadyReported(true);
 
@@ -88,7 +90,7 @@ function SingleBlog() {
     // Fetch comments
     const fetchComments = async () => {
       try {
-        const response = await fetch(`http://localhost:8081/comments/${bid}`);
+        const response = await fetch(`${apiPrefix}/comments/${bid}`);
         const data = await response.json();
         setTotalComment(data.length);
         setComments(data);
@@ -104,7 +106,7 @@ function SingleBlog() {
   const handleLike = async () => {
     try {
       const responseChecker = await fetch(
-        `http://localhost:8081/checker/${bid}/${currentUser.username}`
+        `${apiPrefix}/checker/${bid}/${currentUser.username}`
       );
       const data = await responseChecker.json();
       if (data.likedAlready) {
@@ -118,7 +120,7 @@ function SingleBlog() {
         );
         if (confirmation) {
           const responseLikeDislike = await axios.post(
-            `http://localhost:8081/likedislike/`,
+            `${apiPrefix}/likedislike/`,
             lData
           );
 
@@ -131,7 +133,7 @@ function SingleBlog() {
           x: "like",
         };
         const responseLikeDislike = await axios.post(
-          `http://localhost:8081/likedislike/`,
+          `${apiPrefix}/likedislike/`,
           lData
         );
         setLikeCount(likeCount + 1);
@@ -149,7 +151,7 @@ function SingleBlog() {
     const confirmation = window.confirm("Are you sure you want to delete?");
 
     if (confirmation) {
-      const response = await axios.post("http://localhost:8081/delete", null, {
+      const response = await axios.post(`${apiPrefix}/delete`, null, {
         params: {
           bid: bid,
         },
@@ -179,7 +181,7 @@ function SingleBlog() {
     }
     try {
       const response = await axios.post(
-        `http://localhost:8081/addcomment`,
+        `${apiPrefix}/addcomment`,
         formData
       );
       if (response.data.success) {
@@ -197,7 +199,7 @@ function SingleBlog() {
 
   const backgroundImages = data.images;
 
-  const imgPrefix = "http://localhost:8081/images/";
+  const imgPrefix = `${apiPrefix}/images/`;
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   useEffect(() => {
@@ -240,7 +242,7 @@ function SingleBlog() {
     formData.append("blogAuthor", username);
     formData.append("author_id", id);
     try{
-    const response = await axios.post(`http://localhost:8081/report/blogs`,
+    const response = await axios.post(`${apiPrefix}/report/blogs`,
     formData);
   
     if( response.data.success){

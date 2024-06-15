@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
   res.send("Backend of Sylheti Bloggers");
 });
 
-// <<<<<<<<<<< api for all blogs >>>>>>>>>>>>
+// <<<<<<<<<<< api for all blogs >>>>>>>>>>>
 
 app.get("/blogs", (req, res) => {
   var sql =
@@ -125,7 +125,7 @@ app.get("/info/:bid/", async (req, res) => {
   const bid = req.params.bid;
   try {
     const likedData = await new Promise((resolve, reject) => {
-      const sql = `select count(bid) as likeCount from likedBy where bid=? and likedBy.username in (select users.username from users where users.restricted = '0')`;
+      const sql = `select count(bid) as likeCount from likedby where bid=? and likedby.username in (select users.username from users where users.restricted = '0')`;
       database.query(sql, [bid], (err, data) => {
         if (err) {
           reject(err);
@@ -139,7 +139,7 @@ app.get("/info/:bid/", async (req, res) => {
     const likeCount = likedData;
 
     const dislikedData = await new Promise((resolve, reject) => {
-      const sql = `select count(bid) as dislikeCount from dislikedBy where bid=?`;
+      const sql = `select count(bid) as dislikeCount from dislikedby where bid=?`;
       database.query(sql, [bid], (err, data) => {
         if (err) {
           reject(err);
@@ -170,7 +170,7 @@ app.get("/checker/:bid/:username", async (req, res) => {
 
   try {
     const likedData = await new Promise((resolve, reject) => {
-      const sql = `SELECT * FROM likedBy WHERE bid=? AND username=?`;
+      const sql = `SELECT * FROM likedby WHERE bid=? AND username=?`;
       database.query(sql, [bid, username], (err, data) => {
         if (err) {
           reject(err);
@@ -183,7 +183,7 @@ app.get("/checker/:bid/:username", async (req, res) => {
     const likedAlready = likedData.length > 0;
 
     const dislikedData = await new Promise((resolve, reject) => {
-      const sql = `SELECT * FROM dislikedBy WHERE bid=? AND username=?`;
+      const sql = `SELECT * FROM dislikedby WHERE bid=? AND username=?`;
       database.query(sql, [bid, username], (err, data) => {
         if (err) {
           reject(err);
@@ -750,14 +750,14 @@ app.post("/blogs/reportcheck" , upload.none(), (req, res) => {
   const bid = req.body.bid;
   const reportedBy = req.body.reportedBy;
 
- const sql = "SELECT reportedBy from blogreports WHERE bid=? and reportedBy=?";
+ const sql = "SELECT reportedby FROM blogreports WHERE bid=? and reportedby=?";
 
   database.query(sql, [bid,reportedBy], (err, data)=>{
     if (err) {
       console.error("Error performing this task:", err);
       res.status(500).json({ error: "Error retrriving!" });
     } else { 
-      if (data[0]?.reportedBy?.length > 0) {
+      if (data[0]!=null) {
         res.status(200).json({ success:true });
       } else {
         res.status(200).json({ success: false });
@@ -770,7 +770,7 @@ app.post("/blogs/reportcheck" , upload.none(), (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`http://localhost:${port}/`);
+  console.log(`Running on port ${port}`);
   database.connect((err) => {
     if (err) throw err;
     console.log("Database Connected!");

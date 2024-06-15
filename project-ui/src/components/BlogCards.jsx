@@ -8,6 +8,7 @@ function BlogCards({ blogs, currentPage, selectedCategory, pageSize }) {
     .slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   // console.log(filteredBlogs);
+   const apiPrefix = 'http://localhost:8081'
   return (
     <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8">
       {filteredBlogs.map((blog) => (
@@ -18,7 +19,7 @@ function BlogCards({ blogs, currentPage, selectedCategory, pageSize }) {
         >
           <div>
             <img
-              src={`http://localhost:8081/images/${blog.headerPictureUrl}`}
+              src={`${apiPrefix}/images/${blog.headerPictureUrl}`}
               className="w-full"
               style={{ height: "200px" }}
             />
