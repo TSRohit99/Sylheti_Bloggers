@@ -19,8 +19,8 @@ async function fetchProfileData(username) {
 }
 
 function Profile() {
-  //  const apiPrefix = 'https://sylheti-bloggers.onrender.com'
-   const apiPrefix = 'http://localhost:8081'
+   const apiPrefix = 'https://sylheti-bloggers.onrender.com'
+  //  const apiPrefix = 'http://localhost:8081'
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const navigate = useNavigate();
 
