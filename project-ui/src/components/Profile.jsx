@@ -6,7 +6,8 @@ import axios from "axios";
 import UserContext from "../context/UserContext";
 
 async function fetchProfileData(username) {
-   const apiPrefix = 'http://localhost:8081'
+  const apiPrefix = 'https://sylheti-bloggers.onrender.com'
+  //  const apiPrefix = 'http://localhost:8081'
   try {
     const response = await fetch(`${apiPrefix}/profile/${username}`);
     const data = await response.json();
@@ -18,6 +19,7 @@ async function fetchProfileData(username) {
 }
 
 function Profile() {
+  //  const apiPrefix = 'https://sylheti-bloggers.onrender.com'
    const apiPrefix = 'http://localhost:8081'
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -34,7 +36,6 @@ function Profile() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [file, setFile] = useState(null);
-  const imgPrefix = `${apiPrefix}/images/`;
   
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +45,7 @@ function Profile() {
         const joinDate = joined.split("T")[0];
         setUser({
           fullName: fname || "",
-          profilePicture: imgPrefix + pfpURL || "",
+          profilePicture: pfpURL,
           bio: bio || "",
           joinDate: joinDate || "",
           from: area || "",

@@ -15,7 +15,8 @@ import UserContext from "../context/UserContext";
 import axios from "axios";
 
 function SingleBlog() {
-   const apiPrefix = 'http://localhost:8081'
+ const apiPrefix = 'https://sylheti-bloggers.onrender.com'
+//  const apiPrefix = 'http://localhost:8081'
   const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
   const data = useLoaderData();
@@ -78,7 +79,6 @@ function SingleBlog() {
         formData.append("reportedBy", currentUser.username);
         formData.append("bid", bid);
         const check = await axios.post(`${apiPrefix}/blogs/reportcheck`, formData);   
-        console.log(check.data.success)   
         if(check.data.success)
           setAlreadyReported(true);
 
@@ -223,10 +223,6 @@ function SingleBlog() {
     );
   };
 
-  
- 
-
-
 
   const handleReport = () => {
     setShowReportModal(true);
@@ -269,7 +265,7 @@ function SingleBlog() {
     <div className="blog-page py-14">
       <div className="header-section">
         <img
-          src={imgPrefix + backgroundImages[activeImageIndex].image}
+          src={backgroundImages[activeImageIndex].image}
           alt="Blog Header"
           className="header-image"
           style={{ height: "200px" }}

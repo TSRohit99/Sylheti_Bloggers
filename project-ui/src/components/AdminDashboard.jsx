@@ -11,7 +11,7 @@ import axios from "axios";
 
 const AdminDashboard = () => {
   const { currentUser } = useContext(UserContext);
-   const apiPrefix = 'http://localhost:8081'
+   const apiPrefix = 'https://sylheti-bloggers.onrender.com'
  
  
   if (!currentUser.isAdmin || currentUser.username === "") {

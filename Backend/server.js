@@ -1,10 +1,12 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const multer = require("multer");
 const database = require("./dbConnect");
 const path = require("path");
 const bcrypt = require("bcryptjs");
+require('dotenv').config();
+const { multerGoogleStorage, uploadToGoogleCloud } = require('./uploadToGcloud');
+
 
 const port = 8081;
 app.use(cors());
@@ -496,33 +498,36 @@ app.get("/profile/:username", (req, res) => {
 
 
 
-//,,,,,,,,,Update Profile...........
+//,,,,,,,,, storage config...........
 
-app.use(express.static("public"));
+// app.use(express.static("public"));
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./public/images"); // corrected cb function call
-  },
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
-    ); // corrected cb function call
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "./public/images"); // corrected cb function call
+//   },
+//   filename: function (req, file, cb) {
+//     cb(
+//       null,
+//       file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+//     ); // corrected cb function call
+//   },
+// });
 
-const upload = multer({ storage: storage });
 
-app.post("/update/profile", upload.single("file"), (req, res) => {
+
+// Update Profile Route
+app.post("/update/profile", multerGoogleStorage.single('file'), async (req, res) => {
   const username = req.body.username;
+  const file = req.file;
+  const publicUrl = await uploadToGoogleCloud(file,1);
+
   let sql, values;
 
-  // Check if req.file exists (i.e., a file was uploaded)
-  if (req.file) {
+  if (publicUrl[0]) {
     sql = "UPDATE users SET pfpURL=?, fname=?, bio=?, area=? WHERE username=?";
     values = [
-      req.file.filename,
+      publicUrl[0],
       req.body.fullName,
       req.body.bio,
       req.body.from,
@@ -543,27 +548,36 @@ app.post("/update/profile", upload.single("file"), (req, res) => {
   });
 });
 
-//........Create Blogs..............//
-app.post("/create", upload.array("files", 10), (req, res) => {
+// Create Blog Route
+app.post("/create", multerGoogleStorage.array("files", 10), async (req, res) => {
   const username = req.body.username;
-  const sql0 = "SELECT id, fname FROM users WHERE username = ?";
-  database.query(sql0, [username], (err, result) => {
-    if (err) {
-      console.error("Error getting user profile:", err);
-      res.status(500).send("Error getting user profile");
-      return;
-    }
-    if (result.length === 0) {
+  const files = req.files;
+  const publicUrls = await uploadToGoogleCloud(files,2);
+  try {
+    const [userResult] = await new Promise((resolve, reject) => {
+      const sql0 = "SELECT id, fname FROM users WHERE username = ?";
+      database.query(sql0, [username], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+
+
+    if (userResult.length === 0) {
       console.error("User not found for username:", username);
-      res.status(404).send("User not found");
-      return;
+      return res.status(404).send("User not found");
     }
-    const id = result[0].id;
-    const fname = result[0].fname;
+
+    const id = userResult.id;
+    const fname = userResult.fname;
+
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().split("T")[0];
-    const sql =
-      "INSERT INTO blogs (id, author, title, content, readingTime, category, publishedAt, published) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+    const sql = "INSERT INTO blogs (id, author, title, content, readingTime, category, publishedAt, published) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     const values = [
       id,
       fname,
@@ -574,82 +588,100 @@ app.post("/create", upload.array("files", 10), (req, res) => {
       formattedDate,
       1,
     ];
-    database.query(sql, values, (err, result) => {
-      if (err) {
-        console.error("Error creating blog:", err);
-        res.status(500).send("Error creating blog");
-        return;
-      } else {
-        const sql =
-          "SELECT bid FROM blogs WHERE id = ? ORDER BY bid DESC LIMIT 1";
-        database.query(sql, [id], (err, result) => {
-          if (err) {
-            console.error("Error getting bid:", err);
-            res.status(500).send("Error getting bid:");
-            return;
-          }
-          const bid = result[0].bid;
-          const sql2 = "INSERT INTO blogimages (bid, image) VALUES (?, ?)";
-          let errors = [];
 
-          for (let i = 0; i < req.files.length; i++) {
-            database.query(sql2, [bid, req.files[i].filename], (err, data) => {
-              if (err) {
-                errors.push(err);
-              }
-            });
-          }
-          const sql3 = "UPDATE blogs SET headerPictureUrl =? WHERE bid=? ";
-          database.query(sql3, [req.files[0].filename, bid], (err, result) => {
-            if (err) {
-              console.error("Error updating headerPictureUrl:", err);
-              res.status(500).send("Error updating headerPictureUrl");
-              return;
-            }
-          });
-          if (errors.length > 0) {
-            console.error("Errors inserting images:", errors);
-            res.status(500).send("Error inserting images");
+    await new Promise((resolve, reject) => {
+      database.query(sql, values, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+
+    const [blogResult] = await new Promise((resolve, reject) => {
+      const sql = "SELECT bid FROM blogs WHERE id = ? ORDER BY bid DESC LIMIT 1";
+      database.query(sql, [id], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+
+    const bid = blogResult.bid;
+
+
+    for (const publicUrl of publicUrls) {
+      await new Promise((resolve, reject) => {
+        const sql2 = "INSERT INTO blogimages (bid, image) VALUES (?, ?)";
+        database.query(sql2, [bid, publicUrl], (err, data) => {
+          if (err) {
+            console.error('Error inserting image URL:', err);
+            reject(err);
           } else {
-            const responseData = {
-              message: "New blog created successfully",
-              bid: bid,
-            };
-            res.status(200).json(responseData);
+            resolve(data);
           }
         });
-      }
+      });
+    }
+
+    await new Promise((resolve, reject) => {
+      const sql3 = "UPDATE blogs SET headerPictureUrl = ? WHERE bid = ?";
+      database.query(sql3, [publicUrls[0], bid], (err, result) => {
+        if (err) {
+          console.error("Error updating headerPictureUrl:", err);
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
     });
-  });
+
+    const responseData = {
+      message: "New blog created successfully",
+      bid: bid,
+    };
+
+    res.status(200).json(responseData);
+
+  } catch (err) {
+    console.error("Error creating blog:", err);
+    res.status(500).send("Error creating blog");
+  }
 });
 
-//  <<<<<<<<< Update blogs >>>>>>>>
-app.post("/update", upload.array("files", 10), (req, res) => {
-  const bid = req.body.bid;
 
-  // Check if req.file exists (i.e., a file was uploaded)
-  if (req.files) {
-    const sql1 = "DELETE from blogimages WHERE bid=?";
+
+
+// Update Blog Route
+app.post("/update", multerGoogleStorage.array("files", 10), async (req, res) => {
+  const bid = req.body.bid;
+  const files = req.files;
+  const publicUrls = await uploadToGoogleCloud(files);
+
+  if (publicUrls.length > 0) {
+    const sql1 = "DELETE FROM blogimages WHERE bid = ?";
     database.query(sql1, [bid], (err, result) => {
       if (err) {
-        console.error("Error deleting prev pictures:", err);
-        res.status(500).send("Error deleting prev pictures");
+        console.error("Error deleting previous images:", err);
+        res.status(500).send("Error deleting previous images");
         return;
       }
     });
 
-    const sql2 = "INSERT INTO blogimages (bid, image) VALUES (?, ?)";
-    let errors = [];
-
-    for (let i = 0; i < req.files.length; i++) {
-      database.query(sql2, [bid, req.files[i].filename], (err, data) => {
+    for (const publicUrl of publicUrls) {
+      const sql2 = "INSERT INTO blogimages (bid, image) VALUES (?, ?)";
+      database.query(sql2, [bid, publicUrl], (err, data) => {
         if (err) {
-          errors.push(err);
+          console.error('Error inserting image URL:', err);
         }
       });
     }
-    const sql3 = "UPDATE blogs SET headerPictureUrl =? WHERE bid=? ";
-    database.query(sql3, [req.files[0].filename, bid], (err, result) => {
+
+    const sql3 = "UPDATE blogs SET headerPictureUrl = ? WHERE bid = ?";
+    database.query(sql3, [publicUrls[0], bid], (err, result) => {
       if (err) {
         console.error("Error updating headerPictureUrl:", err);
         res.status(500).send("Error updating headerPictureUrl");
@@ -659,7 +691,7 @@ app.post("/update", upload.array("files", 10), (req, res) => {
   }
 
   const sql =
-    "UPDATE blogs SET title=?, content=?, readingTime=? , category=? WHERE bid=?";
+    "UPDATE blogs SET title=?, content=?, readingTime=?, category=? WHERE bid=?";
   const values = [
     req.body.title,
     req.body.content,
@@ -678,7 +710,7 @@ app.post("/update", upload.array("files", 10), (req, res) => {
   });
 });
 
-app.post("/addcomment", upload.none(), (req, res) => {
+app.post("/addcomment", multerGoogleStorage.none(), (req, res) => {
   const currentDate = new Date();
   const formattedDate = currentDate.toISOString().split("T")[0];
 
@@ -700,7 +732,7 @@ app.post("/addcomment", upload.none(), (req, res) => {
   });
 });
 
-app.post("/report/blogs" , upload.none(), (req, res) => {
+app.post("/report/blogs" , multerGoogleStorage.none(), (req, res) => {
   const bid = req.body.bid;
   const blogAuthor = req.body.blogAuthor;
   const reportText = req.body.reportText;
@@ -724,7 +756,7 @@ app.post("/report/blogs" , upload.none(), (req, res) => {
 
 
 })
-app.post("/profile/blog-action" , upload.none(), (req, res) => {
+app.post("/profile/blog-action" , multerGoogleStorage.none(), (req, res) => {
   const bid = req.body.bid;
   const method = req.body.method;
   let sql;
@@ -746,7 +778,7 @@ sql = "UPDATE blogs SET published = 0 WHERE bid=?";
 
 })
 
-app.post("/blogs/reportcheck" , upload.none(), (req, res) => {
+app.post("/blogs/reportcheck" , multerGoogleStorage.none(), (req, res) => {
   const bid = req.body.bid;
   const reportedBy = req.body.reportedBy;
 

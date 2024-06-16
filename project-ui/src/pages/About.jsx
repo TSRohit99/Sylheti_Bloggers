@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Footer from "/src/components/Footer";
 
 function About() {
@@ -31,7 +32,9 @@ function About() {
             <br />
             <br />
             Feel free to post your blogs, comment on others' posts, and enjoy
-            the world of blogging together. <br /> Happy Blogging!{" "}
+            the world of blogging together. <br /> Happy Blogging!{" "} 
+            <br /> <br />  From the Founder <br />
+            <Link to={'/profile/ts.rohitsen'} className="text-red-500 font-bold" >Rohit Sen </Link>
           </p>
         </div>
       </div>

@@ -17,7 +17,8 @@ import AdminDashboard from "./components/AdminDashboard.jsx";
 import ViewProfile from "./components/ViewProfile.jsx";
 
 const Root = () => {
-   const apiPrefix = 'http://localhost:8081'
+    const apiPrefix = 'https://sylheti-bloggers.onrender.com'
+    // const apiPrefix = 'http://localhost:8081'
   const router = createBrowserRouter([
     {
       path: "/",

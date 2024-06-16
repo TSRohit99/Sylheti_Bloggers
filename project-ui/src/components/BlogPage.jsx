@@ -9,7 +9,7 @@ function BlogPage() {
   const pageSize = 12;
   const [selectedCategory, setselectedCategory] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const apiPrefix = 'http://localhost:8081'
+  const apiPrefix = 'https://sylheti-bloggers.onrender.com'
 
   useEffect(() => {
     async function fetchBlogs() {

@@ -7,7 +7,7 @@ import Profile from "../components/Profile"
 
 
 function SignUp() {
-   const apiPrefix = 'http://localhost:8081'
+  const apiPrefix = 'https://sylheti-bloggers.onrender.com'
   const { currentUser } = useContext(UserContext);
   if(currentUser.username!= ""){
     return <Profile />

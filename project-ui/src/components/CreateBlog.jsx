@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 function CreateBlog({ value }) {
   const { currentUser } = useContext(UserContext);
-   const apiPrefix = 'http://localhost:8081'
+  // const apiPrefix = 'https://sylheti-bloggers.onrender.com'
+  const apiPrefix = 'http://localhost:8081'
   const [files, setFiles] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -64,16 +65,13 @@ function CreateBlog({ value }) {
       }
     } else if(value === "Create a new Blog" && currentUser.username!== "") {
       try {
-
-
         formData.append ("username", currentUser.username);
-
         const response = await axios.post(
           `${apiPrefix}/create`,
           formData
         );
         const bid = response.data.bid;
-        // console.log(bid);
+        console.log(response);
         alert("You have successfully created the blog!");
         navigate(`/blogs/${bid}`);
       } catch (error) {

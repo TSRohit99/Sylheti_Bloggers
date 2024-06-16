@@ -45,11 +45,11 @@ function ViewProfile() {
   }
 
   const joinDate = joined.split("T")[0];
-   const apiPrefix = 'http://localhost:8081'
+  const apiPrefix = 'https://sylheti-bloggers.onrender.com'
 
   const [user, setUser] = useState({
     fullName: fname || "", // Initialize with an empty string if fname is null or undefined
-    profilePicture: `${apiPrefix}/images/` + pfpURL || "",
+    profilePicture: pfpURL,
     bio: bio || "",
     joinDate: joinDate || "",
     from: area || "",
