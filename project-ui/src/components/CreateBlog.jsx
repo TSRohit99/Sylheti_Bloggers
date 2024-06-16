@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 function CreateBlog({ value }) {
   const { currentUser } = useContext(UserContext);
-  // const apiPrefix = 'https://sylheti-bloggers.onrender.com'
-  const apiPrefix = 'http://localhost:8081'
+  const apiPrefix = 'https://sylheti-bloggers.onrender.com'
+  // const apiPrefix = 'http://localhost:8081'
   const [files, setFiles] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");

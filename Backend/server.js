@@ -520,11 +520,12 @@ app.get("/profile/:username", (req, res) => {
 app.post("/update/profile", multerGoogleStorage.single('file'), async (req, res) => {
   const username = req.body.username;
   const file = req.file;
-  const publicUrl = await uploadToGoogleCloud(file,1);
+
 
   let sql, values;
 
-  if (publicUrl[0]) {
+  if (file) {
+    const publicUrl = await uploadToGoogleCloud(file,1);
     sql = "UPDATE users SET pfpURL=?, fname=?, bio=?, area=? WHERE username=?";
     values = [
       publicUrl[0],
@@ -659,7 +660,7 @@ app.post("/create", multerGoogleStorage.array("files", 10), async (req, res) => 
 app.post("/update", multerGoogleStorage.array("files", 10), async (req, res) => {
   const bid = req.body.bid;
   const files = req.files;
-  const publicUrls = await uploadToGoogleCloud(files);
+  const publicUrls = await uploadToGoogleCloud(files,2);
 
   if (publicUrls.length > 0) {
     const sql1 = "DELETE FROM blogimages WHERE bid = ?";
