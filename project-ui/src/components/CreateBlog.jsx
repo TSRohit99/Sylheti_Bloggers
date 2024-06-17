@@ -169,7 +169,7 @@ function CreateBlog({ value }) {
             </select>
           </div>
 
-          <div className="cb ml-96">
+          <div className="cb md:ml-96">
             <button type="submit" className="bg-green-400">
               {btnName}
             </button>

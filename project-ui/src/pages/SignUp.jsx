@@ -60,6 +60,11 @@ function SignUp() {
       }
     }
   };
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <div className="  min-h-screen bg-gray-300 flex justify-center items-center">
@@ -116,12 +121,13 @@ function SignUp() {
               than 8)
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               className="w-full rounded-md px-4 py-2 bg-gray-200 focus:outline-none focus:bg-white"
               name="password"
               onChange={handleInput}
             />
+            <p>Show Password <input type="checkbox" onClick={togglePasswordVisibility} /> </p>
             {errors.password && (
               <span className="text-black">{errors.password}</span>
             )}

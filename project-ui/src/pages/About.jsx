@@ -5,17 +5,17 @@ import Footer from "/src/components/Footer";
 function About() {
   return (
     <>
-      <h1 className="text-5xl text-black text-center mt-20 mb-4">
+      <h1 className="md:text-5xl text-4xl text-black text-center mt-20 mb-4">
         About This Platform
       </h1>
-      <div className="flex">
-        <div>
+      <div className="grid md:flex">
+        <div className="">
           <img
             src="/assets/roh.jpeg"
-            className=" rounded-lg w-72 h-96 ml-12 flex-1 mb-4"
+            className=" rounded-lg w-72 h-96 ml-9 md:ml-12 flex-1 mb-4"
           />
         </div>
-        <div className="flex-1 ml-24 mr-6 mt-8">
+        <div className="md:flex-1 ml-4 md:ml-24 mr-6 mt-8">
           <p className="text-lg">
             {" "}
             Hello Dear Sylheties, welcoming you to my project "Sylethi
@@ -35,6 +35,8 @@ function About() {
             the world of blogging together. <br /> Happy Blogging!{" "} 
             <br /> <br />  From the Founder <br />
             <Link to={'/profile/ts.rohitsen'} className="text-red-500 font-bold" >Rohit Sen </Link>
+            <br />
+            <br />
           </p>
         </div>
       </div>

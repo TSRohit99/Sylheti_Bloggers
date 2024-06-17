@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, Link } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import Profile from "./Profile";
 
@@ -24,7 +24,7 @@ function ViewProfile() {
       </div>
     );
   }
-  
+
   const { username, fname, joined, bio, area, pfpURL, restricted } = data[0];
 
   if (currentUser.username === username) {
@@ -45,7 +45,6 @@ function ViewProfile() {
   }
 
   const joinDate = joined.split("T")[0];
-  const apiPrefix = 'https://sylheti-bloggers.onrender.com'
 
   const [user, setUser] = useState({
     fullName: fname || "", // Initialize with an empty string if fname is null or undefined
@@ -54,9 +53,10 @@ function ViewProfile() {
     joinDate: joinDate || "",
     from: area || "",
     blogs: titles.map((title, index) => ({
-      id: bids[index] || "",
+      bid: bids[index] || "",
       title: title || "",
-      date: publishedAts[index] != null ? publishedAts[index].split("T")[0] : null,
+      publishedAt:
+        publishedAts[index] != null ? publishedAts[index].split("T")[0] : null,
     })),
   });
 
@@ -65,33 +65,76 @@ function ViewProfile() {
   return (
     <>
       <div className="profile-page">
-        <div className="user-info" style={{ paddingTop: "56px" }}>
-          <div className="profile-picture">
-            <img src={user.profilePicture} alt="Profile" />
+        <div
+          className="user-info flex flex-col md:flex-row items-center md:items-start"
+          style={{ paddingTop: "56px" }}
+        >
+          <div className="profile-picture mb-4 md:mb-0 md:mr-4">
+            <img
+              src={user.profilePicture}
+              alt="Profile"
+              className="rounded-full w-24 h-24 object-cover"
+            />
           </div>
-          <div className="user-details">
-            <h1>
+          <div className="user-details text-center md:text-left">
+            <h1 className="text-xl font-bold mb-2">
               {user.fullName} (@{username})
             </h1>
-            <p>{user.bio}</p>
-            <p>Joined: {user.joinDate}</p>
-            <p>From: {user.from}</p>
+            <p className="mb-2 md:text-left">{user.bio}</p>
+            <div className="flex flex-col md:flex-row md:justify-between">
+              <p className="mb-2 md:mb-0">Joined: {user.joinDate}</p>
+              <p className="mb-2 md:mb-0">From: {user.from}</p>
+            </div>
           </div>
         </div>
 
         <div className="blog-post-history">
-          <h2>Blog Post History ({blogCount})</h2>
+          <h2 className="text-xl font-bold mb-4">
+            Blog Post History ({blogCount})
+          </h2>
           {blogCount > 0 && (
-            <ul>
-              {user.blogs.map((blog) => (
-                <li key={blog.id}>
-                  <a href={`/blogs/${blog.id}`}>
-                    {blog.title.substring(0, 50) + "......"}
-                  </a>
-                  <span>{blog.date}</span>
-                </li>
-              ))}
-            </ul>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-200">
+                  <tr>
+                    <th className="py-3 px-6 text-left w-1/4 md:w-auto">
+                      Blog Index
+                    </th>
+                    <th className="py-3 px-6 text-left w-1/2 md:w-auto">
+                      Blog Title
+                    </th>
+                    <th className="py-3 px-6 text-left w-1/4 md:w-auto">
+                      Created At
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {user.blogs.map((blog) => (
+                    <tr key={blog.bid}>
+                      <td className="py-3 px-6 whitespace-nowrap">
+                        <Link
+                          to={`/blogs/${blog.bid}`}
+                          className="text-blue-600 hover:underline"
+                        >
+                          {blog.bid}
+                        </Link>
+                      </td>
+                      <td className="py-3 px-6 whitespace-nowrap">
+                        <Link
+                          to={`/blogs/${blog.bid}`}
+                          className="text-blue-600 hover:underline"
+                        >
+                          {blog.title}
+                        </Link>
+                      </td>
+                      <td className="py-3 px-6 whitespace-nowrap">
+                        {blog.publishedAt}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       </div>
@@ -99,7 +142,10 @@ function ViewProfile() {
       {showReportModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
           <div className="bg-white rounded-lg p-6">
-            <h2 className="text-lg font-bold mb-4 text-red-700">This user has been restricted due to violating rules, admins are checking his blogs/comments!</h2>
+            <h2 className="text-lg font-bold mb-4 text-red-700">
+              This user has been restricted due to violating rules, admins are
+              checking his blogs/comments!
+            </h2>
           </div>
         </div>
       )}

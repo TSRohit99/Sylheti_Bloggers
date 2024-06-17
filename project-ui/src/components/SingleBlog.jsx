@@ -47,7 +47,7 @@ function SingleBlog() {
   if (published == 0) {
     return (
       <div className="flex justify-center items-center h-full">
-        <h1 className="mt-32 text-5xl text-center text-red-500">
+        <h1 className="mt-32 text-3xl text-center text-red-500">
           This blog has been unpublished/deleted!
         </h1>
       </div>
@@ -263,7 +263,7 @@ function SingleBlog() {
   };
   return (
     <div className="blog-page py-14">
-      <div className="header-section">
+      <div className="header-section ">
         <img
           src={backgroundImages[activeImageIndex].image}
           alt="Blog Header"

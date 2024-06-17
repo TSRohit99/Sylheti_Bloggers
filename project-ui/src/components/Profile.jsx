@@ -6,7 +6,7 @@ import axios from "axios";
 import UserContext from "../context/UserContext";
 
 async function fetchProfileData(username) {
-  const apiPrefix = 'https://sylheti-bloggers.onrender.com'
+  const apiPrefix = "https://sylheti-bloggers.onrender.com";
   //  const apiPrefix = 'http://localhost:8081'
   try {
     const response = await fetch(`${apiPrefix}/profile/${username}`);
@@ -19,7 +19,7 @@ async function fetchProfileData(username) {
 }
 
 function Profile() {
-   const apiPrefix = 'https://sylheti-bloggers.onrender.com'
+  const apiPrefix = "https://sylheti-bloggers.onrender.com";
   //  const apiPrefix = 'http://localhost:8081'
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -30,13 +30,13 @@ function Profile() {
     bio: "",
     joinDate: "",
     from: "",
-    bid:null,
+    bid: null,
     blogs: [],
   });
 
   const [isEditing, setIsEditing] = useState(false);
   const [file, setFile] = useState(null);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchProfileData(currentUser.username);
@@ -50,13 +50,15 @@ function Profile() {
           joinDate: joinDate || "",
           from: area || "",
           bid: bid,
-          blogs: (data.map((item) => ({
+          blogs: data.map((item) => ({
             bid: item.bid || "",
             title: item.title || "",
-            publishedAt: item.publishedAt ? item.publishedAt.split("T")[0] : null,
+            publishedAt: item.publishedAt
+              ? item.publishedAt.split("T")[0]
+              : null,
             published: item.published,
             deleted: item.deleted,
-          }))),
+          })),
         });
       }
     };
@@ -65,7 +67,6 @@ function Profile() {
   }, [currentUser]);
 
   const blogCount = user.bid !== null ? user.blogs.length : 0;
-
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -82,10 +83,7 @@ function Profile() {
     formData.append("username", currentUser.username);
 
     axios
-      .post(
-        `${apiPrefix}/update/profile`,
-        formData
-      )
+      .post(`${apiPrefix}/update/profile`, formData)
       .then((req) => console.log(req))
       .catch((err) => console.log(err));
   };
@@ -122,7 +120,8 @@ function Profile() {
       };
 
       const confirmation = window.confirm(
-        `Are you sure you want to ${method} this blog ?`)
+        `Are you sure you want to ${method} this blog ?`
+      );
       if (confirmation) {
         const response = await axios.post(
           `${apiPrefix}/profile/blog-action`,
@@ -131,8 +130,7 @@ function Profile() {
         if (response.data.success) {
           alert(`Blog index ${bid} is now ${method}ed!`);
           window.location.reload();
-        }
-        else {
+        } else {
           alert(`Error while performing this task!`);
           window.location.reload();
         }
@@ -140,7 +138,7 @@ function Profile() {
     } catch (err) {
       console.error("Error while solving : " + err);
     }
-  }
+  };
 
   const handleDelete = async (bid) => {
     const confirmation = window.confirm("Are you sure you want to delete?");
@@ -171,9 +169,16 @@ function Profile() {
 
   return (
     <div className="profile-page">
-      <div className="user-info" style={{ paddingTop: "56px" }}>
-        <div className="profile-picture">
-          <img src={user.profilePicture} alt="Profile" />
+      <div
+        className="user-info flex flex-col items-center md:flex-row md:items-start"
+        style={{ paddingTop: "56px" }}
+      >
+        <div className="profile-picture mb-4 md:mb-0 md:mr-4">
+          <img
+            src={user.profilePicture}
+            alt="Profile"
+            className="rounded-full w-24 h-24 object-cover"
+          />
           {isEditing && (
             <>
               <input
@@ -185,51 +190,60 @@ function Profile() {
               />
               <label
                 htmlFor="upload-input"
-                className="edit-button"
-                style={{ textAlign: "left" }}
+                className="edit-button block text-center mt-2 text-blue-600"
               >
                 Upload Picture
               </label>
             </>
           )}
         </div>
-        <div className="user-details">
-          <h1>
+        <div className="user-details text-center md:text-left">
+          <h1 className="text-xl font-bold mb-2">
             {isEditing ? (
               <input
                 type="text"
                 name="fullName"
                 value={user.fullName}
                 onChange={handleChange}
+                className="block w-full px-2 py-1 text-center md:text-left"
               />
             ) : (
               user.fullName
             )}{" "}
             (@{currentUser.username})
           </h1>
-          <p>
+          <p className="mb-2 md:text-left">
             {isEditing ? (
-              <textarea name="bio" value={user.bio} onChange={handleChange} />
+              <textarea
+                name="bio"
+                value={user.bio}
+                onChange={handleChange}
+                className="block w-full px-2 py-1"
+              />
             ) : (
               user.bio
             )}
           </p>
-          <p>Joined: {user.joinDate}</p>
-          <p>
-            From:{" "}
-            {isEditing ? (
-              <input
-                type="text"
-                name="from"
-                value={user.from}
-                onChange={handleChange}
-              />
-            ) : (
-              user.from
-            )}
-          </p>
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center">
+            <p className="mb-2 md:mb-0">Joined: {user.joinDate}</p>
+            <p className="mb-2 md:mb-0">
+              From:{" "}
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="from"
+                  value={user.from}
+                  onChange={handleChange}
+                  className="block w-full px-2 py-1"
+                />
+              ) : (
+                user.from
+              )}
+            </p>
+          </div>
         </div>
       </div>
+
       {currentUser.userLoggedIn === true ? (
         isEditing ? (
           <div className="" onClick={handleSave}>
@@ -252,74 +266,74 @@ function Profile() {
           Logout
         </button>
       ) : null}
-      <div className="blog-post-history">
-        <h2>Blog Post History ({blogCount})</h2>
-        
-        {blogCount > 0 && (  
-        <table className="w-full">
-                  <thead>
-                    <tr className="bg-gray-200">
-                      <th className="w-1/4 py-2 px-4 text-left">Blog Index</th>
-                      <th className="w-1/3 py-2 px-4 text-left">Blog Title</th>
-                      <th className="w-1/4 py-2 px-4 text-left">Created At</th>
-                      <th className="w-1/4 py-2 px-4 text-left">Action</th>
-                      <th className="w-1/5 py-2 px-4 text-left">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {user.blogs.filter((item)=> item.deleted == 0 ).map((blog) => (
-                      <tr key={blog.bid} className="border-b">
-                        <td>
-                          <Link to={`/blogs/${blog.bid}`}>
-                            {" "}
-                            <span className="w-1/4 truncate text-lg">
-                              {blog.bid}
-                            </span>{" "}
-                          </Link>{" "}
-                        </td>
-                        <td className="py-2 px-4 truncate">
-                        <Link to={`/blogs/${blog.bid}`}> {blog.title} </Link></td>
 
-                        <td className="py-2 px-4 truncate text-right">
-                          {blog.publishedAt}
-                        </td>
-                        <td className="py-2 px-4">
-                          {blog.published ? (
-                            <button
-                              onClick={() => handleBlog(blog.bid , 0 )}
-                              className="bg-red-500 text-white px-2 py-1 rounded"
-                            >
-                              UnPublish
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => handleBlog(blog.bid, 1)}
-                              className="bg-green-500 text-white px-2 py-1 rounded"
-                            >
-                              Publish
-                            </button>
-                          )}
-                        </td>
-                        <td className="py-2 px-4">
+      <div className="blog-post-history mt-6">
+        <h2 className="text-xl font-bold mb-4">
+          Blog Post History ({blogCount})
+        </h2>
+        {blogCount > 0 && (
+          <div className="overflow-x-auto">
+            <table className="w-full whitespace-nowrap">
+              <thead className="bg-gray-200">
+                <tr>
+                  <th className="py-2 px-4 md:px-6 text-left">Blog Index</th>
+                  <th className="py-2 px-4 md:px-6 text-left">Blog Title</th>
+                  <th className="py-2 px-4 md:px-6 text-left">Created At</th>
+                  <th className="py-2 px-4 md:px-6 text-left">Action</th>
+                  <th className="py-2 px-4 md:px-6 text-left">Action</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {user.blogs.map((blog) => (
+                  <tr key={blog.bid} className="border-b">
+                    <td className="py-2 px-4 md:px-6">
+                      <Link
+                        to={`/blogs/${blog.bid}`}
+                        className="text-blue-600 hover:underline block w-full"
+                      >
+                        {blog.bid}
+                      </Link>
+                    </td>
+                    <td className="py-2 px-4 md:px-6">
+                      <Link
+                        to={`/blogs/${blog.bid}`}
+                        className="text-blue-600 hover:underline block w-full"
+                      >
+                        {blog.title}
+                      </Link>
+                    </td>
+                    <td className="py-2 px-4 md:px-6">{blog.publishedAt}</td>
+                    <td className="py-2 px-4 md:px-6">
+                      {blog.published ? (
                         <button
-                              onClick={() => handleDelete(blog.bid)}
-                              className="bg-red-500 text-white px-2 py-1 rounded"
-                            >
-                              Delete
-                            </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>)
-        
-        }
-         
-
-
-
-
-
+                          onClick={() => handleBlog(blog.bid, 0)}
+                          className="bg-red-500 text-white px-2 py-1 rounded"
+                        >
+                          UnPublish
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleBlog(blog.bid, 1)}
+                          className="bg-green-500 text-white px-2 py-1 rounded"
+                        >
+                          Publish
+                        </button>
+                      )}
+                    </td>
+                    <td className="py-2 px-4 md:px-6">
+                      <button
+                        onClick={() => handleDelete(blog.bid)}
+                        className="bg-red-500 text-white px-2 py-1 rounded"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

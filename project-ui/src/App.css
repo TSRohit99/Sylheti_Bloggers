@@ -48,6 +48,7 @@
 
 .header-section {
   position: relative;
+  z-index: 20;
 }
 
 .header-image {

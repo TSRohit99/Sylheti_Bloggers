@@ -3,15 +3,15 @@ import validation from "../regex/loginHandler";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
-import Profile from "../components/Profile"
+import Profile from "../components/Profile";
 
 function Login() {
-  const apiPrefix = 'https://sylheti-bloggers.onrender.com'
+  const apiPrefix = "https://sylheti-bloggers.onrender.com";
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const navigate = useNavigate();
-  
-  if(currentUser.username!= ""){
-    return <Profile />
+
+  if (currentUser.username != "") {
+    return <Profile />;
   }
 
   const [values, setValues] = useState({
@@ -20,7 +20,6 @@ function Login() {
   });
 
   const [errors, setErrors] = useState({});
-  
 
   const handleInput = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -36,9 +35,7 @@ function Login() {
     // Check if there are no validation errors
     if (Object.values(validationErrors).every((error) => error === "")) {
       try {
-        const response = await fetch(
-          `${apiPrefix}/checker/${values.email}`
-        );
+        const response = await fetch(`${apiPrefix}/checker/${values.email}`);
         const data = await response.text();
 
         if (data === "0") {
@@ -47,23 +44,24 @@ function Login() {
             email: "E email registered nay, kindly age account kuloin!",
           });
         } else {
-          const loginResponse = await axios.post(
-            `${apiPrefix}/login`,
-            values
-          );
+          const loginResponse = await axios.post(`${apiPrefix}/login`, values);
           const userData = loginResponse.data;
 
           if (userData.success) {
             // Passwords match, user successfully logged in
-            if(userData.isVerified === 0){
-              alert("Apnar account bortomane check kora or, kindly ektu pore abr try korba!")
-              navigate("/")
-              return ;
+            if (userData.isVerified === 0) {
+              alert(
+                "Apnar account bortomane check kora or, kindly ektu pore abr try korba!"
+              );
+              navigate("/");
+              return;
             }
-            if(userData.restricted === 1){
-              alert("Apnar account restricted kora oise, kindly review er jonno opekka korba!");
-              navigate("/")
-              return ;
+            if (userData.restricted === 1) {
+              alert(
+                "Apnar account restricted kora oise, kindly review er jonno opekka korba!"
+              );
+              navigate("/");
+              return;
             }
             setCurrentUser({
               userLoggedIn: true,
@@ -80,6 +78,11 @@ function Login() {
         console.error("Error checking email:", error);
       }
     }
+  };
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -103,14 +106,17 @@ function Login() {
           </div>
           <div>
             <label htmlFor="password" className="block text-white">
-              Password Cheker12kkk
+              Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               className="w-full rounded-md px-4 py-2 bg-gray-200 focus:outline-none focus:bg-white"
               onChange={handleInput}
             />
+
+           <p>Show Password <input type="checkbox" onClick={togglePasswordVisibility} /> </p>
+
             {errors.password && (
               <span className="text-black">{errors.password}</span>
             )}
