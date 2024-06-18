@@ -15,6 +15,7 @@ import Profile from "./components/Profile.jsx";
 import CreateBlog from "./components/CreateBlog.jsx";
 import AdminDashboard from "./components/AdminDashboard.jsx";
 import ViewProfile from "./components/ViewProfile.jsx";
+import ErrorPage from "./components/ErrorPage.jsx";
 
 const Root = () => {
     const apiPrefix = 'https://sylheti-bloggers.onrender.com'
@@ -76,6 +77,10 @@ const Root = () => {
           element: <AdminDashboard />,
           loader: async () =>
             await fetch(`${apiPrefix}/admin-dash`),
+        },
+        {
+          path: "*",
+          element: <ErrorPage />,
         },
       ],
     },
