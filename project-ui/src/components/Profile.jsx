@@ -272,68 +272,69 @@ function Profile() {
           Blog Post History ({blogCount})
         </h2>
         {blogCount > 0 && (
-          <div className="overflow-x-auto">
-            <table className="w-full whitespace-nowrap">
-              <thead className="bg-gray-200">
-                <tr>
-                  <th className="py-2 px-4 md:px-6 text-left">Blog Index</th>
-                  <th className="py-2 px-4 md:px-6 text-left">Blog Title</th>
-                  <th className="py-2 px-4 md:px-6 text-left">Created At</th>
-                  <th className="py-2 px-4 md:px-6 text-left">Action</th>
-                  <th className="py-2 px-4 md:px-6 text-left">Action</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {user.blogs.map((blog) => (
-                  <tr key={blog.bid} className="border-b">
-                    <td className="py-2 px-4 md:px-6">
-                      <Link
-                        to={`/blogs/${blog.bid}`}
-                        className="text-blue-600 hover:underline block w-full"
-                      >
-                        {blog.bid}
-                      </Link>
-                    </td>
-                    <td className="py-2 px-4 md:px-6">
-                      <Link
-                        to={`/blogs/${blog.bid}`}
-                        className="text-blue-600 hover:underline block w-full"
-                      >
-                        {blog.title}
-                      </Link>
-                    </td>
-                    <td className="py-2 px-4 md:px-6">{blog.publishedAt}</td>
-                    <td className="py-2 px-4 md:px-6">
-                      {blog.published ? (
-                        <button
-                          onClick={() => handleBlog(blog.bid, 0)}
-                          className="bg-red-500 text-white px-2 py-1 rounded"
-                        >
-                          UnPublish
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => handleBlog(blog.bid, 1)}
-                          className="bg-green-500 text-white px-2 py-1 rounded"
-                        >
-                          Publish
-                        </button>
-                      )}
-                    </td>
-                    <td className="py-2 px-4 md:px-6">
-                      <button
-                        onClick={() => handleDelete(blog.bid)}
-                        className="bg-red-500 text-white px-2 py-1 rounded"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+  <div className="overflow-x-auto">
+    <table className="w-full whitespace-nowrap">
+      <thead className="bg-gray-200">
+        <tr>
+          <th className="py-2 px-4 md:px-6 text-left">Blog Index</th>
+          <th className="py-2 px-4 md:px-6 text-left">Blog Title</th>
+          <th className="py-2 px-4 md:px-6 text-left">Created At</th>
+          <th className="py-2 px-4 md:px-6 text-left">Action</th>
+          <th className="py-2 px-4 md:px-6 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody className="bg-white divide-y divide-gray-200">
+        {user.blogs.map((blog) => (
+          <tr key={blog.bid} className="border-b">
+            <td className="py-2 px-4 md:px-6">
+              <Link
+                to={`/blogs/${blog.bid}`}
+                className="text-blue-600 hover:underline block w-full"
+              >
+                {blog.bid}
+              </Link>
+            </td>
+            <td className="py-2 px-4 md:px-6">
+              <Link
+                to={`/blogs/${blog.bid}`}
+                className="text-blue-600 hover:underline block w-full"
+              >
+                {blog.title}
+              </Link>
+            </td>
+            <td className="py-2 px-4 md:px-6">{blog.publishedAt}</td>
+            <td className="py-2 px-4 md:px-6">
+              {blog.published ? (
+                <button
+                  onClick={() => handleBlog(blog.bid, 0)}
+                  className="bg-red-500 text-white px-2 py-1 rounded"
+                >
+                  UnPublish
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleBlog(blog.bid, 1)}
+                  className="bg-green-500 text-white px-2 py-1 rounded"
+                >
+                  Publish
+                </button>
+              )}
+            </td>
+            <td className="py-2 px-4 md:px-6">
+              <button
+                onClick={() => handleDelete(blog.bid)}
+                className="bg-red-500 text-white px-2 py-1 rounded"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
+
       </div>
     </div>
   );
