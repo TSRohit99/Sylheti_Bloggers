@@ -48,8 +48,7 @@ function Home() {
             Kita Bha <span className="text-red-600">Sylethi</span> Okl?
           </h1>
           <p className="text-xs md:text-xl text-white">
-            Afnarar blogging Page o sagotom, ino apnnara mon kulia Blog lekte
-            parva r nijor motamot dite parva!
+          আফনারার ব্লোগ্গিং পেজ ও স্বাগতম, ইনহ আপনারা মন খুলিয়া ব্লগ লেখতে পারবা আর নিজর মতামত দিতে পারবা!
           </p>
         </div>
         <button

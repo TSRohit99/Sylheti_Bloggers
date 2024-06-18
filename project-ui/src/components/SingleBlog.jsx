@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useLoaderData, Link, useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon  } from "@fortawesome/react-fontawesome";
 import {
   faUser,
   faClock,
+  faStopwatch,
   faCalendarAlt,
   faThumbsUp,
   faThumbsDown,
@@ -64,12 +65,27 @@ function SingleBlog() {
   } = data.data[0];
 
   if (published == 0) {
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        if (countdown === 0) {
+          navigate('/');
+        } else {
+          setCountdown(countdown - 1);
+        }
+      }, 1000);
+  
+      return () => clearTimeout(timer);
+    }, [countdown, navigate]);
     return (
-      <div className="flex justify-center items-center h-full">
-        <h1 className="mt-32 text-3xl text-center text-red-500">
-          This blog has been unpublished/deleted!
-        </h1>
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="text-center max-w-md p-6 bg-white rounded-lg shadow-md">
+        <h1 className="text-3xl font-bold mb-4">Oops! Something went wrong.</h1>
+        <p className="mb-4">This blog has been deleted or unpublished!</p>
+        <p className="text-lg font-bold text-red-500 mb-6">
+          Redirecting to the homepage in {countdown} seconds...
+        </p>
       </div>
+    </div>
     );
   }
   const date = publishedAt.split("T")[0];
@@ -315,7 +331,7 @@ function SingleBlog() {
             </span>{" "}
           </Link>
           <span>
-            <FontAwesomeIcon icon={faClock} /> {readingTime} min
+          <FontAwesomeIcon icon={faStopwatch} /> {readingTime} min
           </span>
           <span>
             <FontAwesomeIcon icon={faCalendarAlt} /> {date}
@@ -387,8 +403,8 @@ function SingleBlog() {
                  required
                >
                  <option value="">Select Category</option> {/* Default option should have an empty value */}
-                 <option value="Batfar">Batfar</option>
-                 <option value="Gujob">Gujob</option>
+                 <option value="Fraud">Fraud</option>
+                 <option value="FakeNews">FakeNews</option>
                  <option value="Sensitive">Sensitive</option>
                </select>
              </div>

@@ -34,7 +34,7 @@ function BlogCards({ blogs, currentPage, selectedCategory, pageSize }) {
           </p>
           <p className="text-sm text-gray-700">
             {" "}
-            Published At : {blog.publishedAt}
+            Published At: {new Date(blog.publishedAt).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </Link>
       ))}
