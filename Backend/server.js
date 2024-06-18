@@ -430,6 +430,14 @@ app.post("/admin-action", (req, res) => {
         console.error(err);
       }
     });
+    const sql2 = "UPDATE blogs SET published = '1' WHERE id =?";
+    database.query(sql2, id, (err, data) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+
+    res.status(200).json({ success: true }); 
 
   } else if (status === "delete") {
     const sql = "DELETE FROM users WHERE id =?";
