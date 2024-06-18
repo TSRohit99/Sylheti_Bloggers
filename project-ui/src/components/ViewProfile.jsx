@@ -18,19 +18,22 @@ function ViewProfile() {
   const navigate = useNavigate();
   const [countdown, setCountdown] = useState(5);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (countdown === 0) {
-        navigate('/');
-      } else {
-        setCountdown(countdown - 1);
-      }
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [countdown, navigate]);
+  
 
   if (!data || data.length === 0) {
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        if (countdown === 0) {
+          navigate('/');
+        } else {
+          setCountdown(countdown - 1);
+        }
+      }, 1000);
+  
+      return () => clearTimeout(timer);
+    }, [countdown, navigate]);
+    
     return (
       <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="text-center max-w-md p-6 bg-white rounded-lg shadow-md">
@@ -63,7 +66,7 @@ function ViewProfile() {
     bids.push(bid);
   }
 
-  const joinDate = joined.split("T")[0];
+  const joinDate = joined?.split("T")[0];
 
   const [user, setUser] = useState({
     fullName: fname || "", // Initialize with an empty string if fname is null or undefined

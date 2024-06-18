@@ -489,8 +489,8 @@ app.get("/profile/:username", (req, res) => {
   const username = req.params.username;
   var sql = `SELECT users.username, users.restricted, users.fname, users.joined, users.area, users.bio, users.pfpURL, blogs.title, blogs.deleted, blogs.publishedAt ,blogs.published , blogs.bid, users.id, blogs.bid
   FROM users 
-  LEFT JOIN blogs ON users.id = blogs.id 
-  WHERE blogs.deleted=0 and users.username = ? ORDER BY blogs.bid DESC
+  LEFT JOIN blogs ON users.id = blogs.id and blogs.deleted=0
+  WHERE users.username = ? ORDER BY blogs.bid DESC
   `;
   database.query(sql, [username], (err, result) => {
     if (err) throw err;
