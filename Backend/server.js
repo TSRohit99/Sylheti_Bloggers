@@ -430,8 +430,10 @@ app.post("/admin-action", (req, res) => {
         console.error(err);
       }
     });
-    const sql2 = "UPDATE blogs SET published = '1' WHERE id =?";
-    database.query(sql2, id, (err, data) => {
+
+  } else if (status === "delete") {
+    const sql = "DELETE FROM users WHERE id =?";
+    database.query(sql, id, (err, data) => {
       if (err) {
         console.error(err);
       }
@@ -439,6 +441,7 @@ app.post("/admin-action", (req, res) => {
 
     res.status(200).json({ success: true });
   }
+  
    else if (status === "solved") {
     const sql = "UPDATE blogreports SET solved = 1, adminFeedback=? WHERE report_id =?";
     database.query(sql, [text,id], (err, data) => {

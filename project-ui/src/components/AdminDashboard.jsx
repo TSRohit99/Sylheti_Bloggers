@@ -12,6 +12,7 @@ import axios from "axios";
 const AdminDashboard = () => {
   const { currentUser } = useContext(UserContext);
    const apiPrefix = 'https://sylheti-bloggers.onrender.com'
+  //  const apiPrefix = 'http://localhost:8081'
  
  
   if (!currentUser.isAdmin || currentUser.username === "") {
@@ -101,6 +102,30 @@ const AdminDashboard = () => {
       }
     } catch (err) {
       console.error("Error while verifying : " + err);
+    }
+  };
+  const handleDeleteUser = async (userId) => {
+    // Implement logic to restrict the user with the given userId
+    try {
+      const data = {
+        id: userId,
+        status: "delete",
+      };
+      const confirmation = window.confirm(
+        "Are you sure you want to delete this user?"
+      );
+      if (confirmation) {
+        const response = await axios.post(
+          `${apiPrefix}/admin-action`,
+          data
+        );
+        if (response.data.success) {
+          alert(`${userId} user ID is now deleted!`);
+          window.location.reload();
+        }
+      }
+    } catch (err) {
+      console.error("Error while deleting : " + err);
     }
   };
 
@@ -270,10 +295,10 @@ const AdminDashboard = () => {
                             Verify
                           </button>
                           <button
-                            onClick={() => handleRestrictUser(user.id)}
+                            onClick={() => handleDeleteUser(user.id)}
                             className="bg-red-500 text-white px-2 py-1 rounded"
                           >
-                            Restrict
+                            Delete
                           </button>
                         </div>
                       </li>
