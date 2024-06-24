@@ -28,7 +28,7 @@ Join us and start sharing your unique stories today!
 
 ## High-Level System Overview
 
-![High-Level System Overview](https://i.postimg.cc/XvwVGfbp/diagram-export-6-24-2024-11-07-09-PM.png)
+![High-Level System Overview](https://i.postimg.cc/x8c9mQ6d/diagram-export-6-25-2024-2-48-02-AM.png)
 
 ## Desktop View (showing the features) - Video
 
