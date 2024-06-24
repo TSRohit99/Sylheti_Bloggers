@@ -22,7 +22,13 @@ Join us and start sharing your unique stories today!
 
 - **Admin Dashboard:** Monitor and manage the entire platform and content with ease.
 
+## Techincal Overview User Journey 
 
+![User Journey Diagram](https://i.postimg.cc/XvwVGfbp/diagram-export-6-24-2024-11-07-09-PM.png)
+
+## High-Level System Overview
+
+![High-Level System Overview](https://i.postimg.cc/bNz5sjTj/diagram-export-6-25-2024-12-48-18-AM.png)
 
 ## Desktop View (showing the features) - Video
 
@@ -31,7 +37,10 @@ will add later
 
 ## Mobile View - Video
 
-will add later
+
+https://github.com/TSRohit99/Sylheti_Bloggers/assets/112565753/171c09f6-6c1e-457d-b0dc-31083108f261
+
+
 
 
 ## Hosting And Cloud Storage used
