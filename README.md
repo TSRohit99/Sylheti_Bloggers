@@ -32,7 +32,11 @@ Join us and start sharing your unique stories today!
 
 ## Desktop View (showing the features) - Video
 
-will add later
+
+
+https://github.com/TSRohit99/Sylheti_Bloggers/assets/112565753/889bcec4-d8cc-4688-bed8-206001bc6f97
+
+
 
 
 ## Mobile View - Video
@@ -47,6 +51,7 @@ https://github.com/TSRohit99/Sylheti_Bloggers/assets/112565753/171c09f6-6c1e-457
 - Gcloud for storage and sql database (using free version available for 90 days)
 - Render.com for deploying the backend (https://sylheti-bloggers.onrender.com/)
 - Vercel.com for rendering the frontend (https://sylheti-bloggers.vercel.app/)
+- Netlify.com.com for rendering the frontend (https://sylheti-bloggers.netlify.app/)
 
 ## Languages & DBMS
 **Frontend :** React.js, Tailwind CSS.
@@ -167,6 +172,6 @@ You need to change the apiPrefix from the components to localhost to use the pro
 
 - No keys in APIs, as its for a Uni project. I will add it in the upcoming version.
 
-## Authors
+## Author
 
-- [@Rohit](https://www.github.com/tsrohit99)
+- Contact [@Rohit](https://tsrohit99.github.io) for any queries or contributions.
