@@ -38,7 +38,7 @@ function Home() {
   return (
     <>
       <div
-        className="h-[50vh] md:h-[80vh] bg-cover bg-no-repeat bg-center "
+        className="h-[45vh] md:h-[80vh] bg-cover bg-no-repeat bg-center "
         style={{
           backgroundImage: `url(${backgroundImages[activeImageIndex]})`,
         }}
