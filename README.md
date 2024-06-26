@@ -53,7 +53,7 @@ https://github.com/TSRohit99/Sylheti_Bloggers/assets/112565753/171c09f6-6c1e-457
 - Vercel.com for rendering the frontend (https://sylheti-bloggers.vercel.app/)
 - Netlify.com.com for rendering the frontend (https://sylheti-bloggers.netlify.app/)
 
-## Languages & DBMS
+## Tech Stack
 **Frontend :** React.js, Tailwind CSS.
 
 **Backend :** Node.js and Express framework and some other npm packages.
