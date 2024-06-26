@@ -7,6 +7,9 @@ Designed with the Sylheti community in mind, the intuitive interface makes shari
 
 Join us and start sharing your unique stories today!
 
+## Project Presentation
+
+- [Slides](https://gamma.app/docs/Sylheti-Bloggers-A-Vibrant-Community-67dwemyhlzn8mxv)
 
 ## Features
 
@@ -158,6 +161,8 @@ The frontend server (React + Vite) will run on http://localhost:5173
 Create tables according to this database diagram
 
 ![Database Diagram](https://i.postimg.cc/zDHX6TLj/diagram-export-6-19-2024-1-44-54-AM.png)
+
+dislikedBy is a optional table, if you want to enable the dislike feature (commented in the code base) you can connect and use this table.
 
 ## Note : 
 You need to change the apiPrefix from the components to localhost to use the project in your machine and prefer the Gcloud to use the backend altough I kept the multerStorage in my backend, you can use it as well to save files in your own server.
