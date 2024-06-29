@@ -11,7 +11,7 @@ function About() {
       <div className="grid md:flex">
         <div className="">
           <img
-            src="/assets/roh.jpeg"
+            src="/assets/rohMeg.jpg"
             className=" rounded-lg w-72 h-96 ml-9 md:ml-12 flex-1 mb-4"
           />
         </div>
