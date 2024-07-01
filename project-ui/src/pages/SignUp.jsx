@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import Profile from "../components/Profile"
+import toast from "react-hot-toast";
 
 
 function SignUp() {
@@ -51,7 +52,7 @@ function SignUp() {
             `${apiPrefix}/signup`,
             values
           );
-          alert("You have successfully registered, verfication pending ace, verfication approve oile login korte parva!");
+          toast.success("You have successfully registered, verfication pending ace, verfication approve oile login korte parva!");
           // navigate("/login");
           navigate("/");
         }

@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import UserContext from "../context/UserContext";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 function SingleBlog() {
  const apiPrefix = 'https://sylheti-bloggers.onrender.com'
@@ -194,10 +195,10 @@ function SingleBlog() {
       const data = response.data;
 
       if (data.success) {
-        alert("This blog has been deleted successfully!");
-        navigate("/blogs");
+        toast.success("This blog has been deleted successfully!");
+        setTimeout(() => navigate(`/blogs`), 2000);
       } else {
-        alert("Failed to delete the blog. Please try again later.");
+        toast.error("Failed to delete the blog. Please try again later.");
       }
     }
   };
@@ -211,7 +212,9 @@ function SingleBlog() {
 
 
     if (!userComment) {
-      alert("Please enter a comment before submitting.");
+      toast('Please enter a comment before submitting.!', {
+        icon: '⚠️',
+      });
       return;
     }
     try {
@@ -220,15 +223,16 @@ function SingleBlog() {
         formData
       );
       if (response.data.success) {
-        alert("You have successfully commented on the blog!");
+        toast.success("You have successfully commented on the blog!");
         setUserComment("");
-        window.location.reload();
+        setTimeout(() => window.location.reload(), 2000);
+        
       } else {
-        alert("Failed to add comment. Please try again later.");
+        toast.error("Failed to add comment. Please try again later.");
       }
     } catch (error) {
       console.error("Error adding comment:", error);
-      alert("Failed to add comment. Please try again later.");
+      toast.error("Failed to add comment. Please try again later.");
     }
   };
 
@@ -277,14 +281,14 @@ function SingleBlog() {
     formData);
   
     if( response.data.success){
-      alert("You have succesfully reported, admins will check this report ASAP!")
-      window.location.reload();
+      toast.success("You have succesfully reported, admins will check this report ASAP!")
+      setTimeout(() => window.location.reload(), 2000);
       
     }
 
   }catch(err){
     console.error("got an error : ", err);
-    alert("Error when reporting : status -> failed")
+    toast.error("Error when reporting : status -> failed")
   }
 
     setShowReportModal(false);

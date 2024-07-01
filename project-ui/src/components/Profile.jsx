@@ -4,6 +4,7 @@ import { faUserEdit, faSave } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import UserContext from "../context/UserContext";
+import toast from "react-hot-toast";
 
 async function fetchProfileData(username) {
   const apiPrefix = "https://sylheti-bloggers.onrender.com";
@@ -128,11 +129,11 @@ function Profile() {
           data
         );
         if (response.data.success) {
-          alert(`Blog index ${bid} is now ${method}ed!`);
-          window.location.reload();
+          toast.success(`Blog index ${bid} is now ${method}ed!`);
+          setTimeout(() => window.location.reload(), 2000);
         } else {
-          alert(`Error while performing this task!`);
-          window.location.reload();
+          toast.error(`Error while performing this task!`);
+          setTimeout(() => window.location.reload(), 2000);
         }
       }
     } catch (err) {
@@ -151,10 +152,10 @@ function Profile() {
       });
       const data = response.data;
       if (data.success) {
-        alert("This blog has been deleted successfully!");
-        window.location.reload();
+        toast.success("This blog has been deleted successfully!");
+        setTimeout(() => window.location.reload(), 2000);
       } else {
-        alert("Failed to delete the blog. Please try again later.");
+        toast.error("Failed to delete the blog. Please try again later.");
       }
     }
   };
@@ -163,7 +164,7 @@ function Profile() {
       userLoggedIn: false,
       username: "",
     });
-    alert("You have successfully logged Out!");
+    toast.success("You have successfully logged Out!");
     navigate(`/`);
   };
 

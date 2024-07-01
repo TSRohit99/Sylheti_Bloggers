@@ -4,11 +4,13 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import Profile from "../components/Profile";
+import toast from 'react-hot-toast';
 
 function Login() {
   const apiPrefix = "https://sylheti-bloggers.onrender.com";
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const navigate = useNavigate();
+ 
 
   if (currentUser.username != "") {
     return <Profile />;
@@ -50,16 +52,16 @@ function Login() {
           if (userData.success) {
             // Passwords match, user successfully logged in
             if (userData.isVerified === 0) {
-              alert(
-                "Apnar account bortomane check kora or, kindly ektu pore abr try korba!"
-              );
+              toast('Apnar account bortomane check kora or, kindly ektu pore abr try korba!', {
+                icon: '⚠️',
+              });
               navigate("/");
               return;
             }
             if (userData.restricted === 1) {
-              alert(
-                "Apnar account restricted kora oise, kindly review er jonno opekka korba!"
-              );
+              toast('Apnar account restricted kora oise, kindly review er jonno opekka korba!', {
+                icon: '⚠️',
+              });
               navigate("/");
               return;
             }
@@ -68,7 +70,7 @@ function Login() {
               username: userData.username,
               isAdmin: userData.isAdmin,
             });
-            alert("You are successfully logged in!");
+            toast.success("You are successfully logged in!");
             navigate(`/profile`);
           } else {
             setErrors({ ...errors, password: "Password bhul!" });

@@ -3,6 +3,7 @@ import { useLoaderData } from "react-router-dom";
 import axios from "axios";
 import UserContext from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function CreateBlog({ value }) {
   const { currentUser } = useContext(UserContext);
@@ -57,9 +58,9 @@ function CreateBlog({ value }) {
           `${apiPrefix}/update/`,
           formData
         );
-
-        alert("You have successfully updated the blog!");
-        navigate(`/blogs/${info.bid}`);
+        navigate(`/blogs/${info.bid}`)
+        toast.success("You have successfully updated the blog!");
+        
       } catch (error) {
         console.error("Error updating blog:", error);
       }
@@ -71,14 +72,13 @@ function CreateBlog({ value }) {
           formData
         );
         const bid = response.data.bid;
-        console.log(response);
-        alert("You have successfully created the blog!");
+        toast.success("You have successfully created the blog!");
         navigate(`/blogs/${bid}`);
       } catch (error) {
         console.error("Error creating blog:", error);
       }
     } else {
-      alert("Error updating/creating the blog! Login first! ")
+      toast.error("Error updating/creating the blog! Login first! ")
     }
   };
 
