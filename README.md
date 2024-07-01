@@ -39,7 +39,7 @@ Join us and start sharing your unique stories today!
 
 https://github.com/TSRohit99/Sylheti_Bloggers/assets/112565753/889bcec4-d8cc-4688-bed8-206001bc6f97
 
-
+Note : Notifications (prev alert()) are changed to react-hot-toast in v2.1.3, providing a clean UI for notifications.
 
 
 ## Mobile View - Video
@@ -47,7 +47,7 @@ https://github.com/TSRohit99/Sylheti_Bloggers/assets/112565753/889bcec4-d8cc-468
 
 https://github.com/TSRohit99/Sylheti_Bloggers/assets/112565753/171c09f6-6c1e-457d-b0dc-31083108f261
 
-
+Note : Notifications (prev alert()) are changed to react-hot-toast in v2.1.3, providing a clean UI for notifications.
 
 
 ## Hosting And Cloud Storage used
