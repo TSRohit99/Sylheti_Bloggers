@@ -9,6 +9,15 @@ import toast from "react-hot-toast";
 
 function SignUp() {
   const apiPrefix = 'https://sylheti-bloggers.onrender.com'
+  // const apiPrefix = 'http://localhost:8081'
+  const apiKey = import.meta.env.VITE_API_KEY_SELF
+  const header =  { 
+      method: 'GET', 
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey 
+      }
+    }
   const { currentUser } = useContext(UserContext);
   if(currentUser.username!= ""){
     return <Profile />
@@ -38,7 +47,7 @@ function SignUp() {
     if (Object.values(validationErrors).every((error) => error === "")) {
       try {
         const response = await fetch(
-          `${apiPrefix}/checker/${values.email}`
+          `${apiPrefix}/checker/${values.email}`,header
         );
         const data = await response.text();
 
@@ -50,7 +59,12 @@ function SignUp() {
         } else  {
           const signupResponse = await axios.post(
             `${apiPrefix}/signup`,
-            values
+            values, { 
+              headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': apiKey 
+              }
+            }
           );
           toast.success("You have successfully registered, verfication pending ace, verfication approve oile login korte parva!");
           // navigate("/login");

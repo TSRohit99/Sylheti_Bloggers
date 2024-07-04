@@ -8,6 +8,15 @@ import toast from 'react-hot-toast';
 
 function Login() {
   const apiPrefix = "https://sylheti-bloggers.onrender.com";
+  // const apiPrefix = 'http://localhost:8081'
+  const apiKey = import.meta.env.VITE_API_KEY_SELF
+  const header =  { 
+      method: 'GET', 
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey 
+      }
+    }
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const navigate = useNavigate();
  
@@ -37,7 +46,7 @@ function Login() {
     // Check if there are no validation errors
     if (Object.values(validationErrors).every((error) => error === "")) {
       try {
-        const response = await fetch(`${apiPrefix}/checker/${values.email}`);
+        const response = await fetch(`${apiPrefix}/checker/${values.email}`, header);
         const data = await response.text();
 
         if (data === "0") {
@@ -46,7 +55,7 @@ function Login() {
             email: "E email registered nay, kindly age account kuloin!",
           });
         } else {
-          const loginResponse = await axios.post(`${apiPrefix}/login`, values);
+          const loginResponse = await axios.post(`${apiPrefix}/login`, values, header);
           const userData = loginResponse.data;
 
           if (userData.success) {

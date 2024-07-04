@@ -9,8 +9,19 @@ import toast from "react-hot-toast";
 async function fetchProfileData(username) {
   const apiPrefix = "https://sylheti-bloggers.onrender.com";
   //  const apiPrefix = 'http://localhost:8081'
+
+  const apiKey = import.meta.env.VITE_API_KEY_SELF
+
+  const header =  { 
+      method: 'GET', 
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey 
+      }
+    }
+
   try {
-    const response = await fetch(`${apiPrefix}/profile/${username}`);
+    const response = await fetch(`${apiPrefix}/profile/${username}`,header);
     const data = await response.json();
     return data;
   } catch (error) {
@@ -20,6 +31,8 @@ async function fetchProfileData(username) {
 }
 
 function Profile() {
+  
+  const apiKey = import.meta.env.VITE_API_KEY_SELF
   const apiPrefix = "https://sylheti-bloggers.onrender.com";
   //  const apiPrefix = 'http://localhost:8081'
   const { currentUser, setCurrentUser } = useContext(UserContext);
@@ -84,7 +97,11 @@ function Profile() {
     formData.append("username", currentUser.username);
 
     axios
-      .post(`${apiPrefix}/update/profile`, formData)
+      .post(`${apiPrefix}/update/profile`, formData,  { 
+        headers: {
+          'x-api-key': apiKey 
+        }
+      })
       .then((req) => console.log(req))
       .catch((err) => console.log(err));
   };
@@ -126,7 +143,11 @@ function Profile() {
       if (confirmation) {
         const response = await axios.post(
           `${apiPrefix}/profile/blog-action`,
-          data
+          data,  { 
+            headers: {
+              'x-api-key': apiKey 
+            }
+          }
         );
         if (response.data.success) {
           toast.success(`Blog index ${bid} is now ${method}ed!`);
@@ -145,11 +166,18 @@ function Profile() {
     const confirmation = window.confirm("Are you sure you want to delete?");
 
     if (confirmation) {
-      const response = await axios.post(`${apiPrefix}/delete`, null, {
-        params: {
-          bid: bid,
-        },
-      });
+      const response = await axios.post(
+        `${apiPrefix}/delete`, 
+        null, 
+        {
+          params: {
+            bid: bid,
+          },
+          headers: {
+            'x-api-key': apiKey,
+          },
+        }
+      );
       const data = response.data;
       if (data.success) {
         toast.success("This blog has been deleted successfully!");

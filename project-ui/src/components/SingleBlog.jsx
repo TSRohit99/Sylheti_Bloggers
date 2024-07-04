@@ -26,7 +26,7 @@ function SingleBlog() {
 
   
 
-  if (!data.data[0] || data.data[0].length === 0) {
+  if (data.state === "invalid") {
     useEffect(() => {
       const timer = setTimeout(() => {
         if (countdown === 0) {
@@ -43,7 +43,7 @@ function SingleBlog() {
       <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="text-center max-w-md p-6 bg-white rounded-lg shadow-md">
         <h1 className="text-3xl font-bold mb-4">Oops! Something went wrong.</h1>
-        <p className="mb-4">This blog doesn't exits!</p>
+        <p className="mb-4">This blog doesn't exits! (API failed to fetch)</p>
         <p className="text-lg font-bold text-red-500 mb-6">
           Redirecting to the homepage in {countdown} seconds...
         </p>
@@ -99,7 +99,14 @@ function SingleBlog() {
   const [reportText, setReportText] = useState("");
   const [repCategory, setRepCategory] = useState("");
   const [alreadyReported, setAlreadyReported] = useState(false);
-
+  const apiKey = import.meta.env.VITE_API_KEY_SELF
+  const header =  { 
+      method: 'GET', 
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey 
+      }
+    }
  
 
   useEffect(() => {
@@ -107,14 +114,18 @@ function SingleBlog() {
 
     const fetchLikeDislikeCounts = async () => {
       try {
-        const response = await fetch(`${apiPrefix}/info/${bid}`);
+        const response = await fetch(`${apiPrefix}/info/${bid}`,header);
         const data = await response.json();
         setLikeCount(data.likeCount);
         // setDisLikeCount(data.dislikeCount);
         const formData = new FormData();
         formData.append("reportedBy", currentUser.username);
         formData.append("bid", bid);
-        const check = await axios.post(`${apiPrefix}/blogs/reportcheck`, formData);   
+        const check = await axios.post(`${apiPrefix}/blogs/reportcheck`, formData, {
+          headers: {
+            'x-api-key': apiKey
+          }
+        }); 
         if(check.data.success)
           setAlreadyReported(true);
 
@@ -126,7 +137,7 @@ function SingleBlog() {
     // Fetch comments
     const fetchComments = async () => {
       try {
-        const response = await fetch(`${apiPrefix}/comments/${bid}`);
+        const response = await fetch(`${apiPrefix}/comments/${bid}`,header);
         const data = await response.json();
         setTotalComment(data.length);
         setComments(data);
@@ -142,7 +153,7 @@ function SingleBlog() {
   const handleLike = async () => {
     try {
       const responseChecker = await fetch(
-        `${apiPrefix}/checker/${bid}/${currentUser.username}`
+        `${apiPrefix}/checker/${bid}/${currentUser.username}`, header
       );
       const data = await responseChecker.json();
       if (data.likedAlready) {
@@ -157,7 +168,11 @@ function SingleBlog() {
         if (confirmation) {
           const responseLikeDislike = await axios.post(
             `${apiPrefix}/likedislike/`,
-            lData
+            lData,  {
+              headers: {
+                'x-api-key': apiKey
+              }
+            }
           );
 
           setLikeCount(likeCount - 1);
@@ -170,7 +185,11 @@ function SingleBlog() {
         };
         const responseLikeDislike = await axios.post(
           `${apiPrefix}/likedislike/`,
-          lData
+          lData, {
+            headers: {
+              'x-api-key': apiKey
+            }
+          }
         );
         setLikeCount(likeCount + 1);
       }
@@ -191,6 +210,9 @@ function SingleBlog() {
         params: {
           bid: bid,
         },
+        headers: {
+          'x-api-key': apiKey
+        }
       });
       const data = response.data;
 
@@ -220,7 +242,11 @@ function SingleBlog() {
     try {
       const response = await axios.post(
         `${apiPrefix}/addcomment`,
-        formData
+        formData, {
+          headers: {
+            'x-api-key': apiKey
+          }
+        }
       );
       if (response.data.success) {
         toast.success("You have successfully commented on the blog!");
@@ -278,7 +304,11 @@ function SingleBlog() {
     formData.append("author_id", id);
     try{
     const response = await axios.post(`${apiPrefix}/report/blogs`,
-    formData);
+    formData,  {
+      headers: {
+        'x-api-key': apiKey
+      }
+    });
   
     if( response.data.success){
       toast.success("You have succesfully reported, admins will check this report ASAP!")

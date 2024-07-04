@@ -2,7 +2,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 
+
 function BlogCards({ blogs, currentPage, selectedCategory, pageSize }) {
+  if(blogs.state === "invalid") {
+     return (
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="text-center max-w-md p-6 bg-white rounded-lg shadow-md">
+        <h1 className="text-3xl font-bold mb-4">Oops! Blogs are not fetched. Check the APIs</h1>
+      </div>
+    </div>
+  
+    )}
   const filteredBlogs = blogs
     .filter((blogs) => !selectedCategory || blogs.category === selectedCategory)
     .slice((currentPage - 1) * pageSize, currentPage * pageSize);

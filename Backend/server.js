@@ -6,11 +6,14 @@ const path = require("path");
 const bcrypt = require("bcryptjs");
 require('dotenv').config();
 const { multerGoogleStorage, uploadToGoogleCloud } = require('./uploadToGcloud');
+const validateApiKey = require('./middilewareAPIkeyValidator');
 
 
 const port = 8081;
 app.use(cors());
 app.use(express.json());
+
+app.use(validateApiKey);
 
 app.get("/", (req, res) => {
   res.send("Backend of Sylheti Bloggers");
@@ -45,7 +48,6 @@ app.get("/blogs/:bid", async (req, res) => {
     database.query(sql, [ bid], (err, data) => {
       if (err) {
         reject(err);
-        console.log(err);
         return;
       } else resolve(data);
     });
@@ -565,6 +567,8 @@ app.post("/create", multerGoogleStorage.array("files", 10), async (req, res) => 
   const username = req.body.username;
   const files = req.files;
   const publicUrls = await uploadToGoogleCloud(files,2);
+  
+
   try {
     const [userResult] = await new Promise((resolve, reject) => {
       const sql0 = "SELECT id, fname FROM users WHERE username = ?";
@@ -655,6 +659,7 @@ app.post("/create", multerGoogleStorage.array("files", 10), async (req, res) => 
       message: "New blog created successfully",
       bid: bid,
     };
+  
 
     res.status(200).json(responseData);
 

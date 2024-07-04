@@ -20,6 +20,15 @@ import ErrorPage from "./components/ErrorPage.jsx";
 const Root = () => {
     const apiPrefix = 'https://sylheti-bloggers.onrender.com'
     // const apiPrefix = 'http://localhost:8081'
+    const apiKey = import.meta.env.VITE_API_KEY_SELF
+    const header =  { 
+        method: 'GET', 
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey 
+        }
+      }
+    
   const router = createBrowserRouter([
     {
       path: "/",
@@ -49,13 +58,13 @@ const Root = () => {
           path: "/blogs/:bid",
           element: <SingleBlog />,
           loader: ({ params }) =>
-            fetch(`${apiPrefix}/blogs/${params.bid}`),
+            fetch(`${apiPrefix}/blogs/${params.bid}`, header ),
         },
         {
           path: "/profile/:username",
           element: <ViewProfile />,
           loader: ({ params }) =>
-            fetch(`${apiPrefix}/profile/${params.username}`),
+            fetch(`${apiPrefix}/profile/${params.username}`,header),
         },
         {
           path: "/profile",
@@ -70,13 +79,13 @@ const Root = () => {
           path: "/update/:bid",
           element: <CreateBlog value="Update your Blog" />,
           loader: ({ params }) =>
-            fetch(`${apiPrefix}/blogs/${params.bid}`),
+            fetch(`${apiPrefix}/blogs/${params.bid}`,header),
         },
         {
           path: "/admin",
           element: <AdminDashboard />,
           loader: async () =>
-            await fetch(`${apiPrefix}/admin-dash`),
+            await fetch(`${apiPrefix}/admin-dash`,header),
         },
         {
           path: "*",

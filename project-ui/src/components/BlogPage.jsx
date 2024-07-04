@@ -10,6 +10,9 @@ function BlogPage() {
   const [selectedCategory, setselectedCategory] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
   const apiPrefix = 'https://sylheti-bloggers.onrender.com'
+  // const apiPrefix = 'http://localhost:8081'
+  const apiKey = import.meta.env.VITE_API_KEY_SELF
+
 
   useEffect(() => {
     async function fetchBlogs() {
@@ -19,13 +22,18 @@ function BlogPage() {
         url += `&category=${selectedCategory}`;
       }
 
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: 'GET', 
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey 
+        }
+      });
       const data = await response.json();
       setblogs(data);
-      //   console.log(data);
     }
     fetchBlogs();
-  }, [currentPage, pageSize, selectedCategory]);
+  }, [currentPage, pageSize, selectedCategory, apiKey]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);

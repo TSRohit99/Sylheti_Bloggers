@@ -24,7 +24,19 @@ const AdminDashboard = () => {
       </div>
     );
   }
+
   const data = useLoaderData();
+
+  if (data.state === "invalid") {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="text-center max-w-md p-6 bg-white rounded-lg shadow-md">
+        <h1 className="text-3xl font-bold mb-4">Oops! Something went wrong.</h1>
+        <p className="mb-4">(API failed to fetch)</p>
+      </div>
+    </div>
+    );
+  }
 
   const stats = {
     totalUser: data.users.length,
@@ -85,6 +97,13 @@ const AdminDashboard = () => {
 
  
   const [reportText, setReportText] = useState("");
+  const apiKey = import.meta.env.VITE_API_KEY_SELF
+
+  const header =  { 
+    headers: {
+      'x-api-key': apiKey 
+    }
+  }
 
   const handleVerifyUser = async (userId) => {
     try {
@@ -94,7 +113,7 @@ const AdminDashboard = () => {
       };
       const response = await axios.post(
         `${apiPrefix}/admin-action`,
-        data
+        data,header
       );
       if (response.data.success) {
         alert(`${userId} user ID is now verified!`);
@@ -117,7 +136,7 @@ const AdminDashboard = () => {
       if (confirmation) {
         const response = await axios.post(
           `${apiPrefix}/admin-action`,
-          data
+          data,header
         );
         if (response.data.success) {
           alert(`${userId} user ID is now deleted!`);
@@ -142,7 +161,7 @@ const AdminDashboard = () => {
       if (confirmation) {
         const response = await axios.post(
           `${apiPrefix}/admin-action`,
-          data
+          data,header
         );
         if (response.data.success) {
           alert(`${userId} user ID is now restricted!`);
@@ -165,7 +184,7 @@ const AdminDashboard = () => {
       if (confirmation) {
         const response = await axios.post(
           `${apiPrefix}/admin-action`,
-          data
+          data,header
         );
         if (response.data.success) {
           alert(`${userId} user ID is now unrestricted!`);
@@ -192,7 +211,7 @@ const AdminDashboard = () => {
       if (confirmation) {
         const response = await axios.post(
           `${apiPrefix}/admin-action`,
-          data
+          data, header
         );
         if (response.data.success) {
           alert(`${report_id} report_id is now solved!`);
