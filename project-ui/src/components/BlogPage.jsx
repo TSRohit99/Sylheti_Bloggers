@@ -9,8 +9,8 @@ function BlogPage() {
   const pageSize = 12;
   const [selectedCategory, setselectedCategory] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  // const apiPrefix = 'https://sylheti-bloggers.onrender.com'
-  const apiPrefix = 'http://localhost:8081'
+  const apiPrefix = 'https://sylheti-bloggers.onrender.com'
+  // const apiPrefix = 'http://localhost:8081'
   // const apiKey = import.meta.env.VITE_API_KEY_SELF
   const apiKey="IamYourFatherDamnNowGiveMeAccess";
 
@@ -25,7 +25,6 @@ function BlogPage() {
       const response = await fetch(url, {
         method: 'GET', 
         headers: {
-          'Content-Type': 'application/json',
           'x-api-key': apiKey 
         }
       });

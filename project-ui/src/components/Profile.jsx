@@ -11,7 +11,7 @@ async function fetchProfileData(username) {
   //  const apiPrefix = 'http://localhost:8081'
 
   // const apiKey = import.meta.env.VITE_API_KEY_SELF
-  const apiKey=IamYourFatherDamnNowGiveMeAccess
+  const apiKey="IamYourFatherDamnNowGiveMeAccess"
 
   const header =  { 
       method: 'GET', 

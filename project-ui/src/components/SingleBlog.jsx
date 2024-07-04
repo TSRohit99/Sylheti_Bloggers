@@ -26,7 +26,7 @@ function SingleBlog() {
 
   
 
-  if (data.state === "invalid") {
+  if ( !data.data[0] || data.data[0].length === 0 || data.state === "invalid") {
     useEffect(() => {
       const timer = setTimeout(() => {
         if (countdown === 0) {
@@ -43,7 +43,7 @@ function SingleBlog() {
       <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="text-center max-w-md p-6 bg-white rounded-lg shadow-md">
         <h1 className="text-3xl font-bold mb-4">Oops! Something went wrong.</h1>
-        <p className="mb-4">This blog doesn't exits! (API failed to fetch)</p>
+        <p className="mb-4">This blog doesn't exits! (or API failed to fetch)</p>
         <p className="text-lg font-bold text-red-500 mb-6">
           Redirecting to the homepage in {countdown} seconds...
         </p>
