@@ -4,6 +4,7 @@ Welcome to the Sylheti Bloggers, a vibrant space crafted especially for Sylheti 
 
 Designed with the Sylheti community in mind, the intuitive interface makes sharing your thoughts and tales a breeze. Plus, the dedicated admin dashboard ensures smooth monitoring and content management, keeping the space safe and enjoyable for everyone.
 
+
 Join us and start sharing your unique stories today!
 
 ## Project Presentation
@@ -32,21 +33,19 @@ Join us and start sharing your unique stories today!
 
 ![High-Level System Overview](https://i.postimg.cc/x8c9mQ6d/diagram-export-6-25-2024-2-48-02-AM.png)
 
+Note : Notifications (prev alert()) are changed to react-hot-toast in v2.1.3, providing a clean UI for notifications. CHeck out the mobile view to see.
+
+## Mobile View (showing the latest features) - Video
+
+
+https://github.com/TSRohit99/Sylheti_Bloggers/assets/112565753/80c18521-d681-4b0b-a608-e95ccadf45b4
+
 ## Desktop View (showing the features) - Video
-
-
 
 https://github.com/TSRohit99/Sylheti_Bloggers/assets/112565753/889bcec4-d8cc-4688-bed8-206001bc6f97
 
-Note : Notifications (prev alert()) are changed to react-hot-toast in v2.1.3, providing a clean UI for notifications.
 
 
-## Mobile View - Video
-
-
-https://github.com/TSRohit99/Sylheti_Bloggers/assets/112565753/171c09f6-6c1e-457d-b0dc-31083108f261
-
-Note : Notifications (prev alert()) are changed to react-hot-toast in v2.1.3, providing a clean UI for notifications.
 
 
 ## Hosting And Cloud Storage used
@@ -64,6 +63,8 @@ Note : Notifications (prev alert()) are changed to react-hot-toast in v2.1.3, pr
 
 
 ## API Reference
+
+FYI: I made the API key public (in the latest version) in react components so that anyone can use my APIs. if you want to use your own API Keys then create a .env file in client (project-ui in my case) and use it to your frontend.
 
 #### Get all blogs (API Key Needed)
 
@@ -176,7 +177,7 @@ You need to change the apiPrefix from the components to localhost to use the pro
 ```
 
 ## Cons
-- Users have to wait after registration for login into their account until their accounts get approved by an admin. This apporach is introdcued from the eariler version as I am not using any traditional user auth as JWT.
+- Users have to wait after registration for login into their account until their accounts get approved by an admin. This apporach is introdcued from the eariler version as I am not using any traditional user auth and email verification.
 
 ## Author
 
