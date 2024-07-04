@@ -4,7 +4,7 @@ import { FaUser } from "react-icons/fa";
 
 
 function BlogCards({ blogs, currentPage, selectedCategory, pageSize }) {
-  if(blogs.state === "invalid") {
+  if(blogs=== null || blogs.state === "invalid" || blogs === undefined) {
      return (
       <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="text-center max-w-md p-6 bg-white rounded-lg shadow-md">
@@ -13,6 +13,7 @@ function BlogCards({ blogs, currentPage, selectedCategory, pageSize }) {
     </div>
   
     )}
+    
   const filteredBlogs = blogs
     .filter((blogs) => !selectedCategory || blogs.category === selectedCategory)
     .slice((currentPage - 1) * pageSize, currentPage * pageSize);
