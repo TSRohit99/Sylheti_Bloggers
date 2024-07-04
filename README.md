@@ -66,7 +66,7 @@ Note : Notifications (prev alert()) are changed to react-hot-toast in v2.1.3, pr
 
 ## API Reference
 
-#### Get all blogs
+#### Get all blogs (API Key Needed)
 
 ```http
   GET /blogs
@@ -92,15 +92,19 @@ There are tons of APIs, you can find them on the ./Backend. There are no require
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+To run this project, you will need to add the following environment variables to your .env file 
 
+For Backend :
 `DB_NAME`
 `DB_USER`
 `DB_PASS`
 `DB_HOST`
 `PROJECT_ID`
 
-There's a config file called mykey.json for Gcloud in ./Backend that is not the repo. You need to add it from your Gcloud. You can google it to learn more.
+For Frontend :
+`VITE_API_KEY_SELF`
+
+There's a config file called mykey.json for Gcloud in ./Backend that is not the repo. You need to add it from your Gcloud. You can google it to learn more. also make sure to configure VITE_API_KEY_SELF in client .env to use the APIs.
 
 
 
@@ -174,8 +178,6 @@ You need to change the apiPrefix from the components to localhost to use the pro
 
 ## Cons
 - Users have to wait after registration for login into their account until their accounts get approved by an admin. This apporach is introdcued from the eariler version as I am not using any traditional user auth as JWT.
-
-- No keys in APIs, as its for a Uni project. I will add it in the upcoming version.
 
 ## Author
 
