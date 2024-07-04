@@ -11,8 +11,8 @@ function BlogPage() {
   const [activeCategory, setActiveCategory] = useState(null);
   const apiPrefix = 'https://sylheti-bloggers.onrender.com'
   // const apiPrefix = 'http://localhost:8081'
-  const apiKey = import.meta.env.VITE_API_KEY_SELF
-
+  // const apiKey = import.meta.env.VITE_API_KEY_SELF
+  const VITE_API_KEY_SELF="IamYourFatherDamnNowGiveMeAccess";
 
   useEffect(() => {
     async function fetchBlogs() {
