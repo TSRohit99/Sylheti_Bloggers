@@ -98,7 +98,7 @@ const AdminDashboard = () => {
  
   const [reportText, setReportText] = useState("");
   // const apiKey = import.meta.env.VITE_API_KEY_SELF
-  const VITE_API_KEY_SELF="IamYourFatherDamnNowGiveMeAccess";
+  const apiKey="IamYourFatherDamnNowGiveMeAccess";
   const header =  { 
     headers: {
       'x-api-key': apiKey 

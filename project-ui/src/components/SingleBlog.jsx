@@ -100,7 +100,7 @@ function SingleBlog() {
   const [repCategory, setRepCategory] = useState("");
   const [alreadyReported, setAlreadyReported] = useState(false);
   // const apiKey = import.meta.env.VITE_API_KEY_SELF
-  const VITE_API_KEY_SELF="IamYourFatherDamnNowGiveMeAccess";
+  const apiKey="IamYourFatherDamnNowGiveMeAccess";
   const header =  { 
       method: 'GET', 
       headers: {

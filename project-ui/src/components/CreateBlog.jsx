@@ -25,7 +25,7 @@ function CreateBlog({ value }) {
   const info = value === "Update your Blog" ? data.data[0] : null;
 
   // const apiKey = import.meta.env.VITE_API_KEY_SELF;
-  const VITE_API_KEY_SELF="IamYourFatherDamnNowGiveMeAccess";
+  const apiKey="IamYourFatherDamnNowGiveMeAccess";
   const headers = {
     'x-api-key': apiKey,
   };

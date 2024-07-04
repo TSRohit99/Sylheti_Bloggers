@@ -11,7 +11,7 @@ async function fetchProfileData(username) {
   //  const apiPrefix = 'http://localhost:8081'
 
   // const apiKey = import.meta.env.VITE_API_KEY_SELF
-  const VITE_API_KEY_SELF=IamYourFatherDamnNowGiveMeAccess
+  const apiKey=IamYourFatherDamnNowGiveMeAccess
 
   const header =  { 
       method: 'GET', 
@@ -34,7 +34,7 @@ async function fetchProfileData(username) {
 function Profile() {
   
   // const apiKey = import.meta.env.VITE_API_KEY_SELF
-  const VITE_API_KEY_SELF="IamYourFatherDamnNowGiveMeAccess";
+  const apiKey="IamYourFatherDamnNowGiveMeAccess";
    const apiPrefix = "https://sylheti-bloggers.onrender.com";
   //  const apiPrefix = 'http://localhost:8081'
   const { currentUser, setCurrentUser } = useContext(UserContext);
