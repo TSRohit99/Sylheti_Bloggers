@@ -1,4 +1,4 @@
-
+(there was some issues with API key integration on the hosting providers so, might fix it later in and merge it to main, you'll see an earlier version at main now)
 # Sylheti Bloggers
 
 Welcome to the Sylheti Bloggers, a vibrant space crafted especially for Sylheti speakers! This platform features an engaging mix of 10% native Sylheti and the rest in English, making it both familiar and accessible. Dive into a seamless experience where you can effortlessly create, read, update, and delete blog posts. Showcase your stories with multiple images and connect with the community through likes, comments, and reporting features.
