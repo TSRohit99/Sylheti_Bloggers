@@ -6,6 +6,8 @@ Designed with the Sylheti community in mind, the intuitive interface makes shari
 
 Join us and start sharing your unique stories today!
 
+** Its a Uni Project, and I did not followed the MVC struture in my code base, altough its a best practice will take that into count from next time. **
+
 ## Project Presentation
 
 - [Slides](https://gamma.app/docs/Sylheti-Bloggers-A-Vibrant-Community-67dwemyhlzn8mxv)
@@ -176,7 +178,7 @@ You need to change the apiPrefix from the components to localhost to use the pro
 ```
 
 ## Cons
-- Users have to wait after registration for login into their account until their accounts get approved by an admin. This apporach is introdcued from the eariler version as I am not using any traditional user auth as JWT.
+- Users have to wait after registration for login into their account until their accounts get approved by an admin. This apporach is introdcued from the eariler version as I am not using any traditional cookie based user auth as JWT.
 
 ## Author
 
