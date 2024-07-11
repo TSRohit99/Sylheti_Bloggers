@@ -179,11 +179,7 @@ You need to change the apiPrefix from the components to localhost to use the pro
 ```
 
 ## Cons
-<<<<<<< HEAD
-- Users have to wait after registration for login into their account until their accounts get approved by an admin. This apporach is introdcued from the eariler version as I am not using any traditional cookie based user auth as JWT.
-=======
 - Users have to wait after registration for login into their account until their accounts get approved by an admin. This apporach is introdcued from the eariler version as I am not using any traditional user auth and email verification.
->>>>>>> 33cd1401747d868f846c7edb95b49a6535d5aee5
 
 ## Author
 
