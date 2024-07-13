@@ -1,13 +1,15 @@
+## Objective 
+A full-stack webApp designed for the Sylheti community to share local travel experiences, food recipes, and various other categories. The platform aims to highlight Sylhet's natural beauty and culinary delights, enhancing tourism and spreading the word globally. Users can create accounts to post, like, and comment, fostering a vibrant community.
+
 # Sylheti Bloggers
 
 Welcome to the Sylheti Bloggers, a vibrant space crafted especially for Sylheti speakers! This platform features an engaging mix of 10% native Sylheti and the rest in English, making it both familiar and accessible. Dive into a seamless experience where you can effortlessly create, read, update, and delete blog posts. Showcase your stories with multiple images and connect with the community through likes, comments, and reporting features.
 
 Designed with the Sylheti community in mind, the intuitive interface makes sharing your thoughts and tales a breeze. Plus, the dedicated admin dashboard ensures smooth monitoring and content management, keeping the space safe and enjoyable for everyone.
 
+Join us and start sharing your unique stories today
 
-Join us and start sharing your unique stories today!
-
-** Its a Uni Project, and I did not followed the MVC struture in my code base, altough its a best practice will take that into count from next time. **
+This project was developed as part of my university assignment. While building this application, I did not follow the MVC (Model-View-Controller) structure in the backend codebase. I understand that adhering to MVC is a best practice for maintainable and scalable code, and I will take this into account in future projects.
 
 ## Project Presentation
 
@@ -178,8 +180,9 @@ You need to change the apiPrefix from the components to localhost to use the pro
    const apiPrefix = 'http://localhost:8081'
 ```
 
-## Cons
-- Users have to wait after registration for login into their account until their accounts get approved by an admin. This apporach is introdcued from the eariler version as I am not using any traditional user auth and email verification.
+## Learning Experience
+- Working on Sylheti Bloggers has been a valuable learning experience. It has helped me understand the importance of structured code practices and the impact they have on project scalability and maintainability also implementing the most secure User Authorization. I am committed to implementing best practices such as the MVC architecture and implementing secure user auth in my future projects.
+  
 
 ## Author
 
