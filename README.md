@@ -1,4 +1,6 @@
 ## Objective 
+Since my free Google Cloud tier has expired, the backend is no longer functioning properly. Please check out the mobile version demonstration here: https://github.com/TSRohit99/Sylheti_Bloggers?tab=readme-ov-file#mobile-view-showing-the-latest-features---video 
+
 A full-stack webApp designed for the Sylheti community to share local travel experiences, food recipes, and various other categories. The platform aims to highlight Sylhet's natural beauty and culinary delights, enhancing tourism and spreading the word globally. Users can create accounts to post, like, and comment, fostering a vibrant community.
 
 # Sylheti Bloggers

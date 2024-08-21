@@ -6,6 +6,7 @@ function CategorySelection({ onSelectCategory, activeCategory }) {
     "Khani Review/Recipe",
     "Local News",
     "Others",
+    "dBKash"
   ];
 
   const handleDropdownChange = (event) => {
