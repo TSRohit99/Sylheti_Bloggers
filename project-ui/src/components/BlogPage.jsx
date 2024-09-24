@@ -9,10 +9,9 @@ function BlogPage() {
   const pageSize = 12;
   const [selectedCategory, setselectedCategory] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const apiPrefix = 'https://sylheti-bloggers.onrender.com'
-  // const apiPrefix = 'http://localhost:8081'
-  // const apiKey = import.meta.env.VITE_API_KEY_SELF
-  const apiKey="IamYourFatherDamnNowGiveMeAccess";
+  const [isInteractive, setIsInteractive] = useState(false); // New interactive state
+  const apiPrefix = 'https://sylheti-bloggers.onrender.com';
+  const apiKey = "IamYourFatherDamnNowGiveMeAccess";
 
   useEffect(() => {
     async function fetchBlogs() {
@@ -23,10 +22,10 @@ function BlogPage() {
       }
 
       const response = await fetch(url, {
-        method: 'GET', 
+        method: "GET",
         headers: {
-          'x-api-key': apiKey 
-        }
+          "x-api-key": apiKey,
+        },
       });
       const data = await response.json();
       setblogs(data);
@@ -44,6 +43,11 @@ function BlogPage() {
     setActiveCategory(category);
   };
 
+  // Function to toggle interaction
+  const handleInteractionClick = () => {
+    setIsInteractive(!isInteractive);
+  };
+
   return (
     <div className="blog-page-container">
       <div>
@@ -53,8 +57,40 @@ function BlogPage() {
         />
       </div>
 
-      {/* BlogCards Section  */}
+      {/* Interactive Part */}
+      <div className="interactive-section my-4 p-4 border border-gray-200 rounded-lg bg-gray-100">
+        <h2 className="text-lg font-semibold">
+          Since my free Google Cloud tier has expired, the backend is no longer functioning properly.
+        </h2>
+        <button
+          onClick={handleInteractionClick}
+          className="mt-4 px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
+        >
+          {isInteractive ? "Hide Mobile Version Info" : "Show Mobile Version Info"}
+        </button>
 
+        {isInteractive && (
+          <div className="interactive-content mt-4 p-4 bg-white border border-gray-300 rounded-lg">
+            <p>
+              Please check out the mobile version demonstration here:{" "}
+              <a
+                href="https://github.com/TSRohit99/Sylheti_Bloggers?tab=readme-ov-file#mobile-view-showing-the-latest-features---video"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-green-500 underline hover:text-green-600"
+              >
+                Click Me
+              </a>
+            </p>
+            <p className="mt-2">
+              In the mobile version, you'll see features like category selection, pagination,
+              and other latest updates.
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* BlogCards Section */}
       <div>
         <BlogCards
           blogs={blogs}
@@ -64,8 +100,7 @@ function BlogPage() {
         />
       </div>
 
-      {/* Pagination  */}
-
+      {/* Pagination */}
       <div>
         <Pagination
           onPageChange={handlePageChange}
